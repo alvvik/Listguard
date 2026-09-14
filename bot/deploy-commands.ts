@@ -1,6 +1,7 @@
 import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { REST, Routes } from "discord.js";
 
 const commands = [];
@@ -9,18 +10,20 @@ const commandFiles = fs
   .readdirSync(commandsPath)
   .filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
 
-for (const file of commandFiles) {
-  const filePath = path.join(commandsPath, file);
-  const command = require(filePath).default || require(filePath);
-  if ("data" in command && "execute" in command) {
-    commands.push(command.data.toJSON());
-  }
-}
-
 const rest = new REST({ version: "10" }).setToken(process.env.TOKEN!);
 
 (async () => {
   try {
+    for (const file of commandFiles) {
+      const filePath = path.join(commandsPath, file);
+      const commandModule = await import(pathToFileURL(filePath).href);
+      const command = commandModule.default ?? commandModule;
+
+      if ("data" in command && "execute" in command) {
+        commands.push(command.data.toJSON());
+      }
+    }
+
     console.log("Zaczetto odświeżać");
 
     await rest.put(

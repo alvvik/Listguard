@@ -1,0 +1,12 @@
+import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+
+const exampleCommand = {
+  data: new SlashCommandBuilder()
+    .setName("commandName")
+    .setDescription("Opis komendy"),
+  async execute(interaction: ChatInputCommandInteraction) {
+    await interaction.reply("Hello world!");
+  },
+};
+
+export default exampleCommand;
