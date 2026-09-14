@@ -18,7 +18,6 @@ const botInfo = {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
 
-    // Zużycie RAM przez proces bota (w MB)
     const usedMemory = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(
       2,
     );
@@ -31,7 +30,9 @@ const botInfo = {
     const embed = new EmbedBuilder()
       .setColor(config.mainColour as `#${string}`)
       .setTitle(config.serverName)
-      .setDescription("Informacje o bocie")
+      .setDescription(
+        "Informacje o bocie [developed by Alvv](https://github.com/alvvik)",
+      )
       .addFields(
         {
           name: "Czas działania:",
