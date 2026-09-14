@@ -6,6 +6,8 @@
     "dev": "next dev --port 2877",
     "build": "next build",
     "start": "next start",
+    "bot": "tsx ./bot/index.ts",
+    "deploy": "tsx ./bot/deploy-commands.ts",
     "lint": "eslint",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
@@ -14,6 +16,8 @@
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3",
+    "discord.js": "^14.27.0",
+    "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "next": "16.3.4",
     "react": "19.2.8",
