@@ -19,11 +19,7 @@ export default {
         customStatus[Math.floor(Math.random() * customStatus.length)];
       client.user?.setActivity(status, { type: ActivityType.Playing });
     };
-
-    // Ustaw status od razu przy starcie
     setRandomStatus();
-
-    // Zmieniaj co 30 sekund
     setInterval(setRandomStatus, 10000);
   },
 };
