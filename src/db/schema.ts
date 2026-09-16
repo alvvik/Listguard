@@ -10,7 +10,8 @@ export const applications = sqliteTable("applications", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   userId: integer("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
+
   answers: text("answers"),
   status: text("status").notNull().default("pending"),
   createdAt: text("created_at").notNull(),

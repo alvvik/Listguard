@@ -39,3 +39,25 @@ export async function GET(
     return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
   }
 }
+export async function DELETE(
+  request: Request,
+  { params }: { params: { discordId: string } },
+) {
+  try {
+    const authHeader = request.headers.get("authorization");
+    const secretKey = process.env.TOKEN;
+
+    if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
+      return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+    }
+    const { discordId } = await params;
+    await db.delete(users).where(eq(users.discordId, discordId));
+    return NextResponse.json(
+      { message: "Usunieto uzytkonika" },
+      { status: 200 },
+    );
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
+  }
+}
