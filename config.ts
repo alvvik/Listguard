@@ -30,5 +30,12 @@ export const config: Config = {
     approved: "zaakceptowane",
     rejected: "odrzucone",
   },
-  whitelistQuestions: [],
+  whitelistQuestions: [
+    {
+      id: "1",
+      label: "Testowe pytanie",
+      style: "short",
+      required: true,
+    },
+  ],
 };
