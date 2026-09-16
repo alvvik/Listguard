@@ -1,7 +1,14 @@
 interface ApplicationStatusLabels {
   pending: string;
-  accepted: string;
+  approved: string;
   rejected: string;
+}
+
+interface WhitelistQuestion {
+  id: string;
+  label: string;
+  style: "short" | "paragraph";
+  required?: boolean;
 }
 
 interface Config {
@@ -10,6 +17,7 @@ interface Config {
   domain: string;
   allowedRoleIds: string[];
   applicationStatusLabel: ApplicationStatusLabels;
+  whitelistQuestions: WhitelistQuestion[];
 }
 
 export const config: Config = {
@@ -19,7 +27,8 @@ export const config: Config = {
   allowedRoleIds: ["1549155771764318208"],
   applicationStatusLabel: {
     pending: "oczekujące",
-    accepted: "zaakceptowane",
+    approved: "zaakceptowane",
     rejected: "odrzucone",
   },
+  whitelistQuestions: [],
 };

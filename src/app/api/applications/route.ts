@@ -1,12 +1,13 @@
 import { db } from "@/db";
 import { applications, users } from "@/db/schema";
+import { log } from "console";
 import { eq, and } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
     const authHeader = request.headers.get("authorization");
-    const secretKey = process.env.BOT_SECRET_KEY;
+    const secretKey = process.env.TOKEN;
 
     if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
       return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
@@ -45,9 +46,16 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const authHeader = request.headers.get("authorization");
+    const secretKey = process.env.TOKEN;
+
+    if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
+      return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+    }
+
     const body = await request.json();
     const { discordId, username, answers } = body;
-
+    console.log(body);
     if (!discordId || !username) {
       return NextResponse.json(
         { error: "Brak wymaganych pól " },

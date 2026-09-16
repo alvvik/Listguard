@@ -101,7 +101,7 @@ const botInfo = {
       "http://localhost:2877/api/applications?limit=100",
       {
         headers: {
-          Authorization: `Bearer ${process.env.BOT_SECRET_KEY}`,
+          Authorization: `Bearer ${process.env.TOKEN}`,
         },
       },
     );

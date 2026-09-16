@@ -13,7 +13,7 @@ interface CustomClient extends Client {
   commands: Collection<string, BotCommand>;
 }
 
-const client = new Client({
+export const client = new Client({
   intents: [GatewayIntentBits.Guilds],
 }) as CustomClient;
 client.commands = new Collection();
@@ -48,30 +48,6 @@ async function main() {
       client.on(event.name, (...args) => event.execute(...args, client));
     }
   }
-
-  client.on("interactionCreate", async (interaction) => {
-    if (!interaction.isChatInputCommand()) return;
-
-    const command = client.commands.get(interaction.commandName);
-    if (!command) return;
-
-    try {
-      await command.execute(interaction);
-    } catch (error) {
-      console.error(error);
-      if (interaction.replied || interaction.deferred) {
-        await interaction.followUp({
-          content: "Wystąpił błąd podczas wykonywania tej komendy",
-          ephemeral: true,
-        });
-      } else {
-        await interaction.reply({
-          content: "Wystąpił błąd podczas wykonywania tej komendy",
-          ephemeral: true,
-        });
-      }
-    }
-  });
 
   await client.login(process.env.TOKEN);
 }
