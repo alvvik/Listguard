@@ -61,3 +61,53 @@ export async function DELETE(
     return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
   }
 }
+
+export async function PATCH(
+  request: Request,
+  { params }: { params: { discordId: string } },
+) {
+  try {
+    const authHeader = request.headers.get("authorization");
+    const secretKey = process.env.TOKEN;
+
+    if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
+      return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+    }
+    const { discordId } = await params;
+    const body = await request.json();
+    const { status } = body;
+
+    if (!status) {
+      return NextResponse.json(
+        { error: "Brak statusu w żądaniu" },
+        { status: 400 },
+      );
+    }
+
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.discordId, discordId));
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Nie znaleziono użytkownika" },
+        { status: 404 },
+      );
+    }
+
+    await db
+      .update(applications)
+      .set({ status: status })
+      .where(eq(applications.userId, user.id));
+
+    // 5. Sukces
+    return NextResponse.json(
+      { message: "Status podania został zaktualizowany" },
+      { status: 200 },
+    );
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
+  }
+}
