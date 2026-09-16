@@ -74,7 +74,7 @@ const createApplicationsEmbed = (
     });
 };
 
-const botInfo = {
+const checkAllApplication = {
   data: new SlashCommandBuilder()
     .setName("podania")
     .setDescription("Wyswietl kto wysłał podanie"),
@@ -185,4 +185,4 @@ const botInfo = {
   },
 };
 
-export default botInfo;
+export default checkAllApplication;

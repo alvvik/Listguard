@@ -101,7 +101,6 @@ export async function PATCH(
       .set({ status: status })
       .where(eq(applications.userId, user.id));
 
-    // 5. Sukces
     return NextResponse.json(
       { message: "Status podania został zaktualizowany" },
       { status: 200 },
