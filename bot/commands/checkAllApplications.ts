@@ -69,7 +69,7 @@ const createApplicationsEmbed = (
     .setDescription(description)
     .setTimestamp()
     .setFooter({
-      text: `Strona ${page + 1}/${totalPages} • Developed by Alvv`,
+      text: `Strona ${page + 1}/${totalPages} - Developed by Alvv`,
       iconURL: interaction.client.user?.displayAvatarURL() || undefined,
     });
 };
@@ -97,7 +97,14 @@ const botInfo = {
       });
     }
 
-    const res = await fetch("http://localhost:2877/api/applications?limit=100");
+    const res = await fetch(
+      "http://localhost:2877/api/applications?limit=100",
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.BOT_SECRET_KEY}`,
+        },
+      },
+    );
 
     if (!res.ok) {
       return interaction.reply({

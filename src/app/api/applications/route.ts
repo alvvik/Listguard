@@ -5,6 +5,12 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
+    const authHeader = request.headers.get("authorization");
+    const secretKey = process.env.BOT_SECRET_KEY;
+
+    if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
+      return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
+    }
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const limitParam = searchParams.get("limit");
