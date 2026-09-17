@@ -3,24 +3,45 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 2877",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "bot": "tsx ./bot/index.ts",
+    "deploy": "tsx ./bot/deploy-commands.ts",
+    "lint": "eslint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "discord.js": "^14.27.0",
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
     "next": "16.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/better-sqlite3": "^9.6.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "drizzle-kit": "^0.30.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "tailwindcss": "^4",
+    "tsx": "^4.23.13",
     "typescript": "^5"
+  },
+  "allowScripts": {
+    "better-sqlite3@13.0.3": true,
+    "unrs-resolver@1.12.2": true,
+    "es5-ext@0.10.64": true,
+    "esbuild@0.18.20": true,
+    "esbuild@0.19.12": true,
+    "esbuild@0.28.2": true
   }
 }
