@@ -16,6 +16,7 @@ interface Config {
   mainColour: string;
   domain: string;
   allowedRoleIds: string[];
+
   applicationStatusLabel: ApplicationStatusLabels;
   whitelistQuestions: WhitelistQuestion[];
 }

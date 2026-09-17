@@ -44,7 +44,7 @@ const exampleCommand = {
         actionType === "approved" ? "approved" : "rejected";
 
       const response = await fetch(
-        `http://localhost:2877/api/applications/${userId}`,
+        `http://${config.domain}/api/applications/${userId}`,
         {
           method: "PATCH",
           headers: {

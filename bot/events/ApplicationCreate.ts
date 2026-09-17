@@ -58,7 +58,12 @@ const ApplicationCreate = {
               name: question.label,
               value: answers[question.id]?.slice(0, 1024) || "Brak odpowiedzi",
             })),
-          );
+          )
+          .setTimestamp()
+          .setFooter({
+            text: "Developed by Alvv",
+            iconURL: interaction.client.user?.displayAvatarURL() || undefined,
+          });
 
         const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder()

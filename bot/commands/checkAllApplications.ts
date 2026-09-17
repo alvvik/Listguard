@@ -98,7 +98,7 @@ const checkAllApplication = {
     }
 
     const res = await fetch(
-      "http://localhost:2877/api/applications?limit=100",
+      `http://${config.domain}/api/applications?limit=100`,
       {
         headers: {
           Authorization: `Bearer ${process.env.TOKEN}`,
