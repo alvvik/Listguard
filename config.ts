@@ -16,7 +16,7 @@ interface Config {
   mainColour: string;
   domain: string;
   allowedRoleIds: string[];
-
+  discordServerUrl: string;
   applicationStatusLabel: ApplicationStatusLabels;
   whitelistQuestions: WhitelistQuestion[];
 }
@@ -26,6 +26,7 @@ export const config: Config = {
   mainColour: "#9900ff",
   domain: "localhost:2877",
   allowedRoleIds: ["1549155771764318208"],
+  discordServerUrl: "",
   applicationStatusLabel: {
     pending: "oczekujące",
     approved: "zaakceptowane",
