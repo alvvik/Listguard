@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import background from "@/app/public/background.jpg";
+import { config } from "../../../config";
 export default function Hero() {
   return (
     <section className="hero relative min-h-screen overflow-hidden">
@@ -17,7 +18,7 @@ export default function Hero() {
 
       <div className="hero-content relative z-10 text-neutral-content text-center">
         <div className="max-w-md">
-          <h1 className="mb-5 text-5xl font-bold">Listguard</h1>
+          <h1 className="mb-5 text-5xl font-bold">{config.serverName}</h1>
           <p className="mb-5">
             Pełna integracja Discorda ze stroną WWW i landing page. Open Source,
             bez ukrytych opłat i z pełną kontrolą nad kodem.
