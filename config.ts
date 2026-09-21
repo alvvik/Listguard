@@ -19,6 +19,13 @@ interface Config {
   discordServerUrl: string;
   applicationStatusLabel: ApplicationStatusLabels;
   whitelistQuestions: WhitelistQuestion[];
+  adminsConfig: Admin[];
+}
+
+export interface Admin {
+  name: string;
+  rank: string;
+  discordId: string;
 }
 
 export const config: Config = {
@@ -39,5 +46,9 @@ export const config: Config = {
       style: "short",
       required: true,
     },
+  ],
+  adminsConfig: [
+    { name: "Alvv", rank: "Właściciel", discordId: "993852447166582847" },
+    { name: "Alvv", rank: "Developer", discordId: "993852447166582847" },
   ],
 };
