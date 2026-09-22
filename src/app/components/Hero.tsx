@@ -23,11 +23,23 @@ export default function Hero() {
             Pełna integracja Discorda ze stroną WWW i landing page. Open Source,
             bez ukrytych opłat i z pełną kontrolą nad kodem.
           </p>
-          <div className="space-x-4">
-            <Link className="btn btn-primary" href={"/whitelist"}>
+          <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full max-w-md mx-auto">
+            <Link
+              className="btn btn-primary w-full md:w-auto"
+              href={"/whitelist"}
+            >
               Aplikuj na whitelist!
             </Link>
-            <Link className="btn" href={"https://github.com/alvvik"}>
+            <Link
+              className="btn btn-secondary w-full md:w-auto"
+              href={config.connectLink}
+            >
+              Dołącz na serwer!
+            </Link>
+            <Link
+              className="btn w-full md:w-auto"
+              href={"https://github.com/alvvik"}
+            >
               Github
             </Link>
           </div>
