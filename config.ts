@@ -48,6 +48,12 @@ export const config: Config = {
       style: "short",
       required: true,
     },
+    {
+      id: "2",
+      label: "Testowe pytanie 2",
+      style: "short",
+      required: true,
+    },
   ],
   adminsConfig: [
     { name: "Alvv", rank: "Właściciel", discordId: "993852447166582847" },

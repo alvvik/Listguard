@@ -18,11 +18,6 @@ export async function submitWhitelistForm(formData: FormData) {
   if (!session?.user?.discordId || !session?.user?.name) {
     return { error: "Musisz być zalogowany, aby wysłać formularz" };
   }
-
-  /*if () {
-    return { error: "Wszystkie pola są wymagane" };
-  }*/
-
   try {
     const discordId = session.user.discordId;
     const username = session.user.name;
@@ -57,12 +52,8 @@ export async function submitWhitelistForm(formData: FormData) {
     if (existingPending) {
       return { error: "Masz już oczekujące podanie w systemie!" };
     }
-
-    const answers = JSON.stringify({});
-
     await db.insert(applications).values({
       userId: user.id,
-      answers,
       status: "pending",
       createdAt: new Date().toISOString(),
     });

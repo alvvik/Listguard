@@ -3,38 +3,21 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { LoginStep } from "./components/LoginStep";
+
 import { ConfirmStep } from "./components/ConfirmStep";
 import { StepNavigation } from "./components/StepNavigation";
 import { submitWhitelistForm } from "@/lib/actions";
+import { QAStep } from "./components/QAStep";
 
-const STEPS = ["Zaloguj się", "Potwierdź"] as const;
-type Step = 0 | 1;
+const STEPS = ["Zaloguj się", "Pytania whitelist", "Potwierdź"] as const;
+type Step = 0 | 1 | 2;
 
 export default function WhitelistPage() {
   const { data: session } = useSession();
   const [step, setStep] = useState<Step>(0);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  /* const [hasCheckedWhitelist, setHasCheckedWhitelist] = useState(false);
-  useEffect(() => {
-    async function checkWhitelist() {
-      if (session?.user?.discordId) {
-        try {
-          const response = await fetch("/api/check-whitelist", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ discordId: session.user.discordId }),
-          });
-          const result = await response.json();
-          setHasCheckedWhitelist(result.isInWhitelist);
-        } catch (error) {
-          console.error("Error checking whitelist:", error);
-        }
-      }
-    }
-    checkWhitelist();
-  }, [session]);
-*/
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const handleNext = () => {
     if (step < STEPS.length - 1) {
       setStep((step + 1) as Step);
@@ -52,6 +35,8 @@ export default function WhitelistPage() {
     setLoading(true);
 
     const formData = new FormData(e.currentTarget);
+    const formDataObj = Object.fromEntries(formData.entries());
+    console.log(formDataObj);
 
     const result = await submitWhitelistForm(formData);
 
@@ -83,21 +68,34 @@ export default function WhitelistPage() {
         </ul>
 
         {step === 0 && <LoginStep session={session} onContinue={handleNext} />}
-
-        {step === 1 && (
+        {step === 1 && <QAStep answers={answers} setAnswers={setAnswers} />}
+        {step === 2 && (
           <form onSubmit={handleSubmit}>
             <ConfirmStep />
+            {/* Przekazujemy odpowiedzi dalej, aby FormData je przechwyciło */}
+            {Object.entries(answers).map(([key, value]) => (
+              <input key={key} type="hidden" name={key} value={value} />
+            ))}
+            <StepNavigation
+              currentStep={step}
+              onBack={handleBack}
+              onNext={handleNext}
+              loading={loading}
+              nextDisabled={false}
+              isLastStep={true}
+            />
           </form>
         )}
-
-        <StepNavigation
-          currentStep={step}
-          onBack={handleBack}
-          onNext={handleNext}
-          loading={loading}
-          nextDisabled={step === 0 && !session}
-          isLastStep={step === 1}
-        />
+        {step !== 2 && (
+          <StepNavigation
+            currentStep={step}
+            onBack={handleBack}
+            onNext={handleNext}
+            loading={loading}
+            nextDisabled={step === 0 && !session}
+            isLastStep={false}
+          />
+        )}
       </div>
     </div>
   );
