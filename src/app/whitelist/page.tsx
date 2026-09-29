@@ -1,14 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { LoginStep } from "./components/LoginStep";
 
 import { ConfirmStep } from "./components/ConfirmStep";
 import { StepNavigation } from "./components/StepNavigation";
-import { submitWhitelistForm } from "@/lib/actions";
+import {
+  submitWhitelistForm,
+  checkUserPendingApplication,
+} from "@/lib/actions";
 import { QAStep } from "./components/QAStep";
 import { config } from "../../../config";
+import UserLogOut from "./components/UserLogout";
 
 const STEPS = ["Zaloguj się", "Pytania whitelist", "Potwierdź"] as const;
 type Step = 0 | 1 | 2;
@@ -19,7 +23,24 @@ export default function WhitelistPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasPendingApplication, setHasPendingApplication] = useState(false);
+  const [checkingPending, setCheckingPending] = useState(false);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const checkPending = async () => {
+      if (session?.user?.discordId) {
+        setCheckingPending(true);
+        const pending = await checkUserPendingApplication(
+          session.user.discordId,
+        );
+        setHasPendingApplication(pending);
+        setCheckingPending(false);
+      }
+    };
+
+    checkPending();
+  }, [session]);
   const handleNext = () => {
     if (step === 1) {
       const validationErrors: string[] = [];
@@ -106,6 +127,33 @@ export default function WhitelistPage() {
     );
   }
 
+  if (hasPendingApplication) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <div className="w-full max-w-sm space-y-6 mx-auto ring bg-base-100 p-4 rounded-lg min-h-96 flex flex-col justify-center">
+          <h1 className="text-2xl font-bold text-center">
+            Masz już oczekujące podanie
+          </h1>
+          <p className="text-center">
+            Twoje podanie jest obecnie rozpatrywane przez moderację. Oczekuj na
+            kontakt!
+          </p>
+          <UserLogOut />
+        </div>
+      </div>
+    );
+  }
+
+  if (checkingPending) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <div className="w-full max-w-sm space-y-6 mx-auto ring bg-base-100 p-4 rounded-lg min-h-96 flex flex-col justify-center">
+          <span className="loading loading-spinner loading-lg mx-auto"></span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="w-full max-w-sm space-y-6 mx-auto ring bg-base-100 p-4 rounded-lg min-h-96 flex flex-col justify-center">
@@ -144,7 +192,6 @@ export default function WhitelistPage() {
         {step === 2 && (
           <form onSubmit={handleSubmit}>
             <ConfirmStep />
-            {/* Przekazujemy odpowiedzi dalej, aby FormData je przechwyciło */}
             {Object.entries(answers).map(([key, value]) => (
               <input key={key} type="hidden" name={key} value={value} />
             ))}

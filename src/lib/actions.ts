@@ -13,6 +13,25 @@ export async function checkUserInWhitelist(discordId: string) {
   return user !== null;
 }
 
+export async function checkUserPendingApplication(discordId: string) {
+  const user = await db.query.users.findFirst({
+    where: eq(users.discordId, discordId),
+  });
+
+  if (!user) {
+    return false;
+  }
+
+  const pendingApplication = await db.query.applications.findFirst({
+    where: and(
+      eq(applications.userId, user.id),
+      eq(applications.status, "pending"),
+    ),
+  });
+
+  return pendingApplication !== null;
+}
+
 export async function submitWhitelistForm(formData: FormData) {
   const session = await auth();
 
@@ -21,7 +40,7 @@ export async function submitWhitelistForm(formData: FormData) {
   }
 
   const validationErrors: string[] = [];
-  const answersRecord: Record<string, string> = {}; // Obiekt na odpowiedzi
+  const answersRecord: Record<string, string> = {};
 
   for (const question of config.whitelistQuestions) {
     const answer = formData.get(`question-${question.id}`) as string | null;
@@ -40,8 +59,6 @@ export async function submitWhitelistForm(formData: FormData) {
         );
         continue;
       }
-
-      // Zapisujemy poprawną odpowiedź przypisaną do ID pytania
       answersRecord[question.id] = trimmedAnswer;
     }
   }
