@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 
 export async function GET(
   request: Request,
-  { params }: { params: { discordId: string } },
+  { params }: { params: Promise<{ discordId: string }> },
 ) {
   try {
     const authHeader = request.headers.get("authorization");
@@ -41,7 +41,7 @@ export async function GET(
 }
 export async function DELETE(
   request: Request,
-  { params }: { params: { discordId: string } },
+  { params }: { params: Promise<{ discordId: string }> },
 ) {
   try {
     const authHeader = request.headers.get("authorization");
@@ -64,7 +64,7 @@ export async function DELETE(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { discordId: string } },
+  { params }: { params: Promise<{ discordId: string }> },
 ) {
   try {
     const authHeader = request.headers.get("authorization");
