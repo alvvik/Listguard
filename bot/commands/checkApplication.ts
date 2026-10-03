@@ -17,7 +17,7 @@ type ApplicationStatus = keyof typeof config.applicationStatusLabel;
 
 const exampleCommand = {
   data: new SlashCommandBuilder()
-    .setName("checkapplication")
+    .setName("sprawdzpodanie")
     .setDescription("Sprawdza podanie użytkownika po ID Discorda")
     .addStringOption((option) =>
       option
@@ -67,6 +67,7 @@ const exampleCommand = {
         embeds: [
           new EmbedBuilder()
             .setColor(config.mainColour as `#${string}`)
+
             .setTitle(config.serverName)
             .setDescription(`Zaktulizowano status użytkonika: <@${userId}>`)
             .addFields({
@@ -111,9 +112,17 @@ const exampleCommand = {
     const answers = JSON.parse(application.answers);
     const embed = new EmbedBuilder()
       .setTitle("Podanie użytkownika")
-      .setColor(0x2b2d31)
+      .setColor(config.mainColour as `#${string}`)
       .addFields(
         { name: "Discord ID", value: String(application.discordId ?? userId) },
+        {
+          name: "Aktualny status",
+          value: `**${
+            config.applicationStatusLabel[
+              application.status as ApplicationStatus
+            ] ?? "Brak statusu"
+          }**`,
+        },
         { name: "Nazwa", value: String(application.username ?? "Brak") },
         ...Object.entries(answers).map(([key, value]) => ({
           name: String(key),
