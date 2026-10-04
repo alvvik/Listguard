@@ -99,9 +99,6 @@ export default function WhitelistPage() {
     setError(null);
 
     const formData = new FormData(e.currentTarget);
-    const formDataObj = Object.fromEntries(formData.entries());
-    console.log(formDataObj);
-
     const result = await submitWhitelistForm(formData);
 
     if (result.success) {

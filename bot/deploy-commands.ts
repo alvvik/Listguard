@@ -24,7 +24,7 @@ const rest = new REST({ version: "10" }).setToken(process.env.TOKEN!);
       }
     }
 
-    console.log("Zaczetto odświeżać");
+    console.log("Zaczęto odświeżać");
 
     await rest.put(
       Routes.applicationGuildCommands(
@@ -34,7 +34,7 @@ const rest = new REST({ version: "10" }).setToken(process.env.TOKEN!);
       { body: commands },
     );
 
-    console.log("zarejestrowano komendy");
+    console.log("Zarejestrowano komendy");
   } catch (error) {
     console.error(error);
   }

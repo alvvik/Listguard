@@ -30,7 +30,6 @@ const exampleCommand = {
       const parts = interaction.customId.split(":");
       const actionType = parts[1];
       const userId = parts[2];
-      console.log(actionType);
       if (actionType === "keep") {
         await interaction.update({
           content: "Anulowano. Status pozostał bez zmian.",
