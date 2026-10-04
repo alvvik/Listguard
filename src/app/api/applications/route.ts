@@ -2,15 +2,26 @@ import { db } from "@/db";
 import { applications, users } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { isRateLimited } from "@/lib/rateLimit";
 
 export async function GET(request: Request) {
   try {
+    const ip = request.headers.get("x-forwarded-for") ?? "127.0.0.1";
+
+    if (isRateLimited(ip, 30, 60 * 1000)) {
+      return NextResponse.json(
+        { error: "Zbyt wiele zapytań. Spróbuj ponownie za chwilę." },
+        { status: 429 },
+      );
+    }
+
     const authHeader = request.headers.get("authorization");
     const secretKey = process.env.TOKEN;
 
     if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
       return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
     }
+
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const limitParam = searchParams.get("limit");
@@ -37,7 +48,7 @@ export async function GET(request: Request) {
   } catch (err) {
     console.error(err);
     return NextResponse.json(
-      { error: "Nie można obsluzyc tego żądania" },
+      { error: "Nie można obsłużyć tego żądania" },
       { status: 500 },
     );
   }
@@ -45,6 +56,15 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const ip = request.headers.get("x-forwarded-for") ?? "127.0.0.1";
+
+    if (isRateLimited(ip, 5, 60 * 1000)) {
+      return NextResponse.json(
+        { error: "Zbyt wiele prób wysłania podania. Odczekaj chwilę." },
+        { status: 429 },
+      );
+    }
+
     const authHeader = request.headers.get("authorization");
     const secretKey = process.env.TOKEN;
 
@@ -54,10 +74,10 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     const { discordId, username, answers } = body;
-    console.log(body);
+
     if (!discordId || !username) {
       return NextResponse.json(
-        { error: "Brak wymaganych pól " },
+        { error: "Brak wymaganych pól" },
         { status: 400 },
       );
     }
