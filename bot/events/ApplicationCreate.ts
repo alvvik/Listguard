@@ -107,7 +107,7 @@ const ApplicationCreate = {
         return;
       }
 
-      const response = await fetch("http://localhost:2877/api/applications", {
+      const response = await fetch(`${process.env.API_URL}/api/applications`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

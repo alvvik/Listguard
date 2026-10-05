@@ -43,7 +43,7 @@ const exampleCommand = {
         actionType === "approved" ? "approved" : "rejected";
 
       const response = await fetch(
-        `http://${config.domain}/api/applications/${userId}`,
+        `${process.env.API_URL}/api/applications/${userId}`,
         {
           method: "PATCH",
           headers: {
@@ -91,7 +91,7 @@ const exampleCommand = {
     const userId = interaction.options.getString("userid", true);
 
     const response = await fetch(
-      `http://localhost:2877/api/applications/${userId}`,
+      `${process.env.API_URL}/api/applications/${userId}`,
       {
         headers: {
           Authorization: `Bearer ${process.env.TOKEN}`,
