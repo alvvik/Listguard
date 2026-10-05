@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 import { env } from "@/lib/env";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  if (pathname !== "/whitelist/manage" && pathname !== "/whitelist/admin") {
+  if (pathname !== "/whitelist/manage") {
     return NextResponse.next();
   }
 
@@ -31,6 +31,7 @@ export async function middleware(request: NextRequest) {
     });
 
     const { hasRole } = await roleResponse.json();
+
     if (!roleResponse.ok || !hasRole) {
       return NextResponse.redirect(new URL("/", request.url));
     }

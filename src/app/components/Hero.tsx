@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import background from "@/app/public/background.jpg";
+import background from "../../../public/background.jpg";
 import { config } from "../../../config";
 export default function Hero() {
   return (

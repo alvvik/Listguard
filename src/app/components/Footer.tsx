@@ -1,5 +1,5 @@
 import Image from "next/image";
-import background from "@/app/public/background.jpg";
+import background from "../../../public/background.jpg";
 import { config } from "../../../config";
 import Link from "next/link";
 export default function Footer() {
