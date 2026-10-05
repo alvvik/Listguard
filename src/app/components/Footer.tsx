@@ -11,6 +11,7 @@ export default function Footer() {
             src={background}
             alt="Tło stopki"
             fill
+            aria-hidden="true"
             className="object-cover object-center rounded-t-sm "
           />
 

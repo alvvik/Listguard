@@ -8,6 +8,7 @@ export default function Hero() {
       <Image
         src={background}
         alt=""
+        aria-hidden="true"
         fill
         priority
         className="object-cover"
