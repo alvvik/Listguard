@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { LoginStep } from "./components/LoginStep";
 
-import { ConfirmStep } from "./components/ConfirmStep";
 import { StepNavigation } from "./components/StepNavigation";
 import {
   submitWhitelistForm,
@@ -188,7 +187,6 @@ export default function WhitelistPage() {
         {step === 1 && <QAStep answers={answers} setAnswers={setAnswers} />}
         {step === 2 && (
           <form onSubmit={handleSubmit}>
-            <ConfirmStep />
             {Object.entries(answers).map(([key, value]) => (
               <input key={key} type="hidden" name={key} value={value} />
             ))}
