@@ -22,7 +22,7 @@ const interactionCreate = {
     };
     if (interaction.isButton()) {
       if (interaction.customId.startsWith("application_status:")) {
-        const command = clientWithCommands.commands.get("checkapplication");
+        const command = clientWithCommands.commands.get("sprawdzpodanie");
         if (!command) return;
 
         try {

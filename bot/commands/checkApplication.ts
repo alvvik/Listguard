@@ -27,6 +27,7 @@ const exampleCommand = {
     ),
   async execute(interaction: ChatInputCommandInteraction | Interaction) {
     if (interaction.isButton()) {
+      console.log("Button interaction detected");
       const parts = interaction.customId.split(":");
       const actionType = parts[1];
       const userId = parts[2];
@@ -42,6 +43,8 @@ const exampleCommand = {
       const dbStatus: ApplicationStatus =
         actionType === "approved" ? "approved" : "rejected";
 
+      await interaction.deferUpdate();
+
       const response = await fetch(
         `${process.env.API_URL}/api/applications/${userId}`,
         {
@@ -55,20 +58,21 @@ const exampleCommand = {
       );
 
       if (!response.ok) {
-        await interaction.reply({
+        await interaction.editReply({
           content: "Nie udało się zmienić statusu podania.",
-          ephemeral: true,
+          embeds: [],
+          components: [],
         });
         return;
       }
 
-      await interaction.update({
+      await interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setColor(config.mainColour as `#${string}`)
 
             .setTitle(config.serverName)
-            .setDescription(`Zaktulizowano status użytkonika: <@${userId}>`)
+            .setDescription(`Zaktulizowano status użytkonika: **<@${userId}>**`)
             .addFields({
               name: "Aktualny status:",
               value: config.applicationStatusLabel[dbStatus],
