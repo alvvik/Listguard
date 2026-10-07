@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-
+import { config } from "../../config";
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/whitelist/manage",
     },
-    sitemap: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/sitemap.xml`,
+    sitemap: `${config.domain}/sitemap.xml`,
   };
 }
