@@ -2,19 +2,23 @@ import Image from "next/image";
 import Link from "next/link";
 import background from "../../../public/background.jpg";
 import { config } from "../../../config";
+import { Parallax } from "./Parallax";
 export default function Hero() {
   return (
-    <section className="hero relative min-h-screen overflow-hidden">
-      <Image
-        src={background}
-        alt=""
-        aria-hidden="true"
-        fill
-        priority
-        className="object-cover"
-        sizes="100vw"
-      />
-
+    <section className="hero  min-h-screen overflow-hidden">
+      <Parallax className="absolute inset-0 h-full w-full">
+        <div className="absolute inset-0 h-full w-full">
+          <Image
+            src={background}
+            alt=""
+            aria-hidden="true"
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
+        </div>
+      </Parallax>
       <div className="hero-overlay absolute inset-0 bg-black/50" />
 
       <div className="hero-content relative z-10 text-neutral-content text-center">
@@ -46,6 +50,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-background to-transparent" />
     </section>
   );
 }
