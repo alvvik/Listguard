@@ -6,7 +6,16 @@ import { Parallax } from "./Parallax";
 export default function Hero() {
   return (
     <section className="hero  min-h-screen overflow-hidden">
-      <Parallax className="absolute inset-0 h-full w-full">
+      <Image
+        src={background}
+        alt=""
+        aria-hidden="true"
+        fill
+        priority
+        className="object-cover md:hidden"
+        sizes="100vw"
+      />
+      <Parallax className="absolute inset-0 h-full w-full hidden md:block">
         <div className="absolute inset-0 h-full w-full">
           <Image
             src={background}
