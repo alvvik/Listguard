@@ -63,10 +63,13 @@ async function main() {
         try {
           const data = JSON.parse(body);
           const { secretKey, userId, allowedRoleIds, guildId } = data;
-
           if (secretKey !== process.env.TOKEN) {
             res.writeHead(401, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ error: "Invalid secret key" }));
+            res.end(
+              JSON.stringify({
+                error: "Invalid secret key",
+              }),
+            );
             return;
           }
 

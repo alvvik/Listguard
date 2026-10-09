@@ -15,9 +15,7 @@ export default function Footer() {
             aria-hidden="true"
             className="object-cover object-center"
           />
-
           <div className="pointer-events-none absolute inset-x-0 top-0 z-5 h-40 bg-linear-to-b from-background to-transparent" />
-
           <div className="relative z-10 flex gap-3 p-4 flex-col justify-center items-center">
             <h2 className="text-2xl font-bold">
               Dołącz do naszej społeczności już dziś!

@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { users, applications } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { auth } from "@/lib/auth";
+import { env } from "@/lib/env";
 import { config } from "../../config";
 
 export async function checkUserInWhitelist(discordId: string) {
@@ -30,6 +31,30 @@ export async function checkUserPendingApplication(discordId: string) {
   });
 
   return pendingApplication !== null;
+}
+
+export async function checkUserHasAllowedRole(discordId: string) {
+  try {
+    const roleResponse = await fetch(`${env.BOT_URL}/check-role`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        secretKey: process.env.TOKEN,
+        userId: discordId,
+        guildId: env.DISCORD_GUILD_ID,
+        allowedRoleIds: config.allowedRoleIds,
+      }),
+      cache: "no-store",
+    });
+
+    const { hasRole } = (await roleResponse.json()) as {
+      hasRole?: boolean;
+    };
+
+    return roleResponse.ok && hasRole === true;
+  } catch {
+    return false;
+  }
 }
 
 export async function submitWhitelistForm(formData: FormData) {

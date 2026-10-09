@@ -8,10 +8,13 @@ import { StepNavigation } from "./components/StepNavigation";
 import {
   submitWhitelistForm,
   checkUserPendingApplication,
+  checkUserHasAllowedRole,
 } from "@/lib/actions";
 import { QAStep } from "./components/QAStep";
 import { config } from "../../../config";
 import UserLogOut from "./components/UserLogout";
+import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 
 const STEPS = ["Zaloguj się", "Pytania whitelist", "Potwierdź"] as const;
 type Step = 0 | 1 | 2;
@@ -25,7 +28,7 @@ export default function WhitelistPage() {
   const [hasPendingApplication, setHasPendingApplication] = useState(false);
   const [checkingPending, setCheckingPending] = useState(false);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-
+  const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
     const checkPending = async () => {
       if (session?.user?.discordId) {
@@ -39,6 +42,15 @@ export default function WhitelistPage() {
     };
 
     checkPending();
+  }, [session]);
+  useEffect(() => {
+    const checkUserWhitelist = async () => {
+      if (session?.user?.discordId) {
+        const isAdmin = await checkUserHasAllowedRole(session?.user?.discordId);
+        setIsAdmin(isAdmin);
+      }
+    };
+    checkUserWhitelist();
   }, [session]);
   const handleNext = () => {
     if (step === 1) {
@@ -108,7 +120,26 @@ export default function WhitelistPage() {
 
     setLoading(false);
   };
-
+  if (isAdmin) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <div className="w-full max-w-sm space-y-6 mx-auto ring bg-base-100 p-4 rounded-lg min-h-96 flex flex-col justify-center">
+          <h1 className="text-2xl font-bold text-center">
+            Przejdź do panelu administratora
+          </h1>
+          <UserLogOut />
+          <div className="flex flex-col gap-2 justify-center items-center">
+            <Link
+              href="/whitelist/manage"
+              className="btn btn-primary w-1/3  flex justify-center items-center"
+            >
+              Przejdź <ExternalLink className="h-5 w-5" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (success) {
     return (
       <div className="h-screen flex justify-center items-center">
