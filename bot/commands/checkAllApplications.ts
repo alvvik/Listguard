@@ -4,9 +4,11 @@ import {
   ButtonStyle,
   ChatInputCommandInteraction,
   EmbedBuilder,
+  GuildMember,
   SlashCommandBuilder,
 } from "discord.js";
 import { config } from "../../config";
+import { createNoRoleEmbed } from "../embeds/createNoRoleEmbed";
 
 const PAGE_SIZE = 5;
 
@@ -86,15 +88,30 @@ const checkAllApplication = {
       });
     }
 
+    const member = interaction.member as GuildMember;
+
+    if (!member) {
+      if (interaction.isRepliable()) {
+        await interaction.reply({
+          content: "Tej komendy można używać tylko na serwerze.",
+          ephemeral: true,
+        });
+      }
+      return;
+    }
+
     const hasRole = config.allowedRoleIds.some((roleId) =>
-      interaction.member.roles.cache.has(roleId),
+      member.roles.cache.has(roleId),
     );
 
     if (!hasRole) {
-      return interaction.reply({
-        content: "Nie masz uprawnień do użycia tej komendy!",
-        ephemeral: true,
-      });
+      if (interaction.isRepliable()) {
+        await interaction.reply({
+          embeds: [createNoRoleEmbed(interaction)],
+          ephemeral: true,
+        });
+      }
+      return;
     }
 
     const res = await fetch(

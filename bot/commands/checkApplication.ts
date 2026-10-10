@@ -4,10 +4,12 @@ import {
   ButtonStyle,
   ChatInputCommandInteraction,
   EmbedBuilder,
+  GuildMember,
   Interaction,
   SlashCommandBuilder,
 } from "discord.js";
 import { config } from "../../config";
+import { createNoRoleEmbed } from "../embeds/createNoRoleEmbed";
 
 const APPROVE_PREFIX = "application_status:approved:";
 const REJECT_PREFIX = "application_status:rejected:";
@@ -26,6 +28,31 @@ const exampleCommand = {
         .setRequired(true),
     ),
   async execute(interaction: ChatInputCommandInteraction | Interaction) {
+    const member = interaction.member as GuildMember;
+
+    if (!member) {
+      if (interaction.isRepliable()) {
+        await interaction.reply({
+          content: "Tej komendy można używać tylko na serwerze.",
+          ephemeral: true,
+        });
+      }
+      return;
+    }
+
+    const hasRole = config.allowedRoleIds.some((roleId) =>
+      member.roles.cache.has(roleId),
+    );
+
+    if (!hasRole) {
+      if (interaction.isRepliable()) {
+        await interaction.reply({
+          embeds: [createNoRoleEmbed(interaction)],
+          ephemeral: true,
+        });
+      }
+      return;
+    }
     if (interaction.isButton()) {
       console.log("Button interaction detected");
       const parts = interaction.customId.split(":");
