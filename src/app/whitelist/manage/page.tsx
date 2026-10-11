@@ -1,3 +1,3 @@
 export default function Home() {
-  return <div>Bardzo sekretna strona...</div>;
+  return <div className="flex ">bardzo sekretna strona</div>;
 }
