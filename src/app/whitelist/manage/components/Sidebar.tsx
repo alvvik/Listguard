@@ -1,5 +1,7 @@
-import { House } from "lucide-react";
+"use client";
+import { House, User } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 const items: {
   id: number;
   icon: React.ReactNode;
@@ -9,29 +11,39 @@ const items: {
   {
     id: 0,
     icon: <House className="my-1.5 inline-block size-4 shrink-0" />,
-    label: "Dashboard",
+    label: "Dash",
     href: "/whitelist/manage",
+  },
+  {
+    id: 1,
+    icon: <User className="my-1.5 inline-block size-4 shrink-0" />,
+    label: "Podania",
+    href: "/whitelist/manage/applications",
   },
 ];
 
 export default function Sidebar() {
+  const pathname = usePathname();
   return (
     <div className="drawer-side z-30 h-full">
       <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
 
       <div className="flex h-full flex-col items-start bg-base-200 w-64 md:w-64 transition-all duration-300">
         <ul className="menu w-full grow px-2 py-4 gap-1">
-          {items.map((item) => (
-            <li key={item.id} className="w-full">
-              <Link
-                href={item.href}
-                className="flex items-center gap-4 w-full overflow-hidden whitespace-nowrap"
-              >
-                {item.icon}
-                <span className="truncate">{item.label}</span>
-              </Link>
-            </li>
-          ))}
+          {items.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <li key={item.id} className="w-full">
+                <Link
+                  href={item.href}
+                  className={`flex items-center gap-4 w-full overflow-hidden whitespace-nowrap ${isActive ? "bg-primary text-primary-content" : ""}`}
+                >
+                  {item.icon}
+                  <span className="truncate">{item.label}</span>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>
