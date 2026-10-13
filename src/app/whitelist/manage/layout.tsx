@@ -20,7 +20,7 @@ export default async function DashboardLayout({
             <Menu className="size-5" />
           </label>
         </div>
-        <main className="pt-12 md:pt-0 md:pl-0 ">{children}</main>
+        <main className="pt-12 md:pt-0 md:pl-0">{children}</main>
       </div>
 
       <Sidebar />

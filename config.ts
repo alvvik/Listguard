@@ -37,9 +37,9 @@ export const config: Config = {
   allowedRoleIds: ["1549155771764318208"],
   discordServerUrl: "",
   applicationStatusLabel: {
-    pending: "oczekujące",
-    approved: "zaakceptowane",
-    rejected: "odrzucone",
+    pending: "Oczekujące",
+    approved: "Zaakceptowane",
+    rejected: "Odrzucone",
   },
   whitelistQuestions: [
     {

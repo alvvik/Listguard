@@ -9,7 +9,7 @@ export const createNoRoleEmbed = (
   interaction: ChatInputCommandInteraction | Interaction,
 ) => {
   return new EmbedBuilder()
-    .setTitle("Brak uprawnień") // Poprawiłem też tytuł, bo wcześniej był "Podanie użytkownika"
+    .setTitle("Brak uprawnień")
     .setColor(config.mainColour as `#${string}`)
     .setDescription("Nie masz wymaganej roli, aby wykonać tę akcję!")
     .setTimestamp()
