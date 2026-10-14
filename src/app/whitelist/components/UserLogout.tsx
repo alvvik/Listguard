@@ -12,7 +12,7 @@ export default function UserLogOut() {
     <div className="flex items-center justify-between bg-base-200 p-4 rounded-lg w-full">
       <div className="flex items-center gap-3">
         <Image
-          src={session.user.image ?? "/default-avatar.png"}
+          src={session.user.image ?? "/default-avatar.svg"}
           alt="Zdjecie użytkownika"
           width={48}
           height={48}

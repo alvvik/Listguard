@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title desc">
+  <title id="title">Domyślny awatar użytkownika</title>
+  <desc id="desc">Neutralna sylwetka użytkownika na niebieskim tle</desc>
+  <rect width="48" height="48" rx="24" fill="#1d4ed8"/>
+  <circle cx="24" cy="18" r="8" fill="#dbeafe"/>
+  <path d="M10 43c1.8-8 7.4-12 14-12s12.2 4 14 12" fill="#dbeafe"/>
+</svg>
