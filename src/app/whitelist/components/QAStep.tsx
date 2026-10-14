@@ -6,7 +6,9 @@ interface QuestionInputProps {
   answer: string;
   onChange: (questionKey: string, value: string) => void;
 }
-
+const sanitizeInput = (input: string) => {
+  return input.replace(/<[^>]*>?/gm, "");
+};
 const QuestionInput = memo(
   ({ question, answer, onChange }: QuestionInputProps) => {
     const [hadText, setHadText] = useState(false);
@@ -34,10 +36,13 @@ const QuestionInput = memo(
           value={answer}
           onChange={(e) => {
             const val = e.target.value;
-            if (!hadText && val.trim().length > 0) {
+
+            const sanitizedValue = sanitizeInput(val);
+            if (!hadText && sanitizedValue.trim().length > 0) {
               setHadText(true);
             }
-            onChange(questionKey, val);
+
+            onChange(questionKey, sanitizedValue);
           }}
         />
         {hasError && (
