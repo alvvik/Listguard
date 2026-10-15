@@ -1,3 +1,5 @@
+import { env } from "@/lib/env.client";
+
 interface ApplicationStatusLabels {
   pending: string;
   approved: string;
@@ -32,7 +34,7 @@ export interface Admin {
 export const config: Config = {
   serverName: "Listguard",
   mainColour: "#9900ff",
-  domain: process.env.DOMAIN || "localhost:2877",
+  domain: env.NEXT_PUBLIC_DOMAIN || "localhost:2877",
   connectLink: "cfx.re/join/test",
   allowedRoleIds: ["1549155771764318208"],
   discordServerUrl: "",

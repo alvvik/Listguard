@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { config as appConfig } from "../config";
-import { auth } from "@/lib/auth";
-import { env } from "@/lib/env";
+import { env as publicEnv } from "@/lib/env.client";
+import { env } from "@/lib/env.server";
+import { auth } from "./lib/auth";
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (pathname !== "/whitelist/manage") {
@@ -18,17 +20,20 @@ export async function middleware(request: NextRequest) {
   const userId = session.user.discordId;
 
   try {
-    const roleResponse = await fetch(`${env.BOT_URL}/check-role`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        secretKey: env.TOKEN,
-        userId,
-        guildId: env.DISCORD_GUILD_ID,
-        allowedRoleIds: appConfig.allowedRoleIds,
-      }),
-      cache: "no-store",
-    });
+    const roleResponse = await fetch(
+      `${publicEnv.NEXT_PUBLIC_BOT_URL}/check-role`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          secretKey: env.TOKEN,
+          userId,
+          guildId: env.DISCORD_GUILD_ID,
+          allowedRoleIds: appConfig.allowedRoleIds,
+        }),
+        cache: "no-store",
+      },
+    );
 
     const { hasRole } = await roleResponse.json();
 

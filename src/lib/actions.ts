@@ -4,7 +4,8 @@ import { db } from "@/db";
 import { users, applications } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { auth } from "@/lib/auth";
-import { env } from "@/lib/env";
+import { env as publicEnv } from "@/lib/env.client";
+import { env } from "@/lib/env.server";
 import { config } from "../../config";
 import { z } from "zod";
 
@@ -36,11 +37,11 @@ export async function checkUserPendingApplication(discordId: string) {
 
 export async function checkUserHasAllowedRole(discordId: string) {
   try {
-    const roleResponse = await fetch(`${env.BOT_URL}/check-role`, {
+    const roleResponse = await fetch(`${publicEnv.NEXT_PUBLIC_BOT_URL}/check-role`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        secretKey: process.env.TOKEN,
+        secretKey: env.TOKEN,
         userId: discordId,
         guildId: env.DISCORD_GUILD_ID,
         allowedRoleIds: config.allowedRoleIds,
