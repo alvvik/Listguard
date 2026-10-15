@@ -1,6 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import UserDetailsModal from "./UserDetailsModal";
+import { updateApplicationStatus } from "@/lib/actions";
 import {
   columnFilteringFeature,
   createFilteredRowModel,
@@ -15,6 +18,7 @@ import {
 import type { ColumnDef } from "@tanstack/react-table";
 import { formatDate } from "@/lib/utils";
 import { ListSortAscending, ListSortDescending } from "lucide-react";
+import { toast } from "react-hot-toast";
 
 type User = {
   id: number;
@@ -58,9 +62,35 @@ export default function UserTableDesktop({
   data: User[];
   statusLabels: Record<string, string>;
 }) {
+  const router = useRouter();
+  const [loadingStatus, setLoadingStatus] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
   const uniqueStatuses = useMemo(() => {
     return Array.from(new Set(data.map((item) => item.status))).filter(Boolean);
   }, [data]);
+
+  const updateStatus = async (
+    discordId: string,
+    newStatus: string,
+  ): Promise<boolean> => {
+    setLoadingStatus(discordId);
+    try {
+      const result = await updateApplicationStatus(discordId, newStatus);
+
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      router.refresh();
+      return true;
+    } catch (error) {
+      toast.error("Wystąpił błąd podczas zmiany statusu.");
+      return false;
+    } finally {
+      setLoadingStatus(null);
+    }
+  };
 
   const columns: ColumnDef<typeof features, User>[] = useMemo(
     () => [
@@ -69,6 +99,7 @@ export default function UserTableDesktop({
         header: "ID",
         sortFn: "alphanumeric",
         filterFn: "includesString",
+        size: 30,
       },
       {
         accessorKey: "discordId",
@@ -79,6 +110,7 @@ export default function UserTableDesktop({
         accessorKey: "username",
         header: "Username",
         filterFn: "includesString",
+        size: 150,
       },
       {
         accessorKey: "createdAt",
@@ -92,8 +124,23 @@ export default function UserTableDesktop({
         sortFn: "alphanumeric",
         filterFn: "exactFilter",
       },
+      {
+        id: "actions",
+        header: "Akcje",
+        cell: ({ row }) => {
+          const user = row.original;
+          return (
+            <button
+              onClick={() => setSelectedUser(user)}
+              className="btn btn-sm btn-outline btn-primary"
+            >
+              Szczegóły
+            </button>
+          );
+        },
+      },
     ],
-    [],
+    [statusLabels],
   );
 
   const table = useTable({
@@ -105,6 +152,16 @@ export default function UserTableDesktop({
 
   return (
     <div className="w-full overflow-x-auto">
+      {selectedUser && (
+        <UserDetailsModal
+          user={selectedUser}
+          statusLabels={statusLabels}
+          onUpdateStatus={updateStatus}
+          isOpen={!!selectedUser}
+          onClose={() => setSelectedUser(null)}
+          isLoading={loadingStatus === selectedUser.discordId}
+        />
+      )}
       <table className="table w-full">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -141,7 +198,9 @@ export default function UserTableDesktop({
                       </span>
                     </button>
 
-                    {header.column.id === "status" ? (
+                    {header.column.id === "actions" ||
+                    header.column.id === "id" ? null : header.column.id ===
+                      "status" ? (
                       <select
                         value={(header.column.getFilterValue() ?? "") as string}
                         onChange={(e) =>

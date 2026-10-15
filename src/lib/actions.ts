@@ -58,6 +58,33 @@ export async function checkUserHasAllowedRole(discordId: string) {
     return false;
   }
 }
+export async function updateApplicationStatus(discordId: string, newStatus: string) {
+  const session = await auth();
+  if (!session?.user?.discordId || !(await checkUserHasAllowedRole(session.user.discordId))) {
+    return { error: "Brak uprawnień" };
+  }
+
+  try {
+    const user = await db.query.users.findFirst({
+      where: eq(users.discordId, discordId),
+    });
+
+    if (!user) {
+      return { error: "Nie znaleziono użytkownika" };
+    }
+
+    await db
+      .update(applications)
+      .set({ status: newStatus })
+      .where(eq(applications.userId, user.id));
+
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { error: "Błąd serwera" };
+  }
+}
+
 const sanitizeAnswer = (value: string) =>
   value.replace(/<[^>]*>?/gm, "").trim();
 const whitelistSchema = z.object(
