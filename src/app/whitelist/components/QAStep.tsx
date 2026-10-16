@@ -13,6 +13,7 @@ const QuestionInput = memo(
   ({ question, answer, onChange }: QuestionInputProps) => {
     const [hadText, setHadText] = useState(false);
     const questionKey = `question-${question.id}`;
+    const errorId = `${questionKey}-error`;
 
     const trimmedAnswer = answer.trim();
     const error =
@@ -32,6 +33,10 @@ const QuestionInput = memo(
         <input
           type="text"
           id={questionKey}
+          aria-label={question.label}
+          aria-required={question.required ? "true" : undefined}
+          aria-invalid={hasError ? true : undefined}
+          aria-describedby={hasError ? errorId : undefined}
           className={`input input-bordered ${hasError ? "input-error" : ""}`}
           value={answer}
           onChange={(e) => {
@@ -46,8 +51,8 @@ const QuestionInput = memo(
           }}
         />
         {hasError && (
-          <label className="label">
-            <span className="label-text-alt text-error">{error}</span>
+          <label className="label" htmlFor={questionKey}>
+            <span id={errorId} className="label-text-alt text-error">{error}</span>
           </label>
         )}
       </div>

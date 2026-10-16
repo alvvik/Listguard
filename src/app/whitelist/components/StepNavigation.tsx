@@ -23,6 +23,7 @@ export function StepNavigation({
         onClick={onBack}
         type="button"
         disabled={currentStep === 0}
+        aria-label="Cofnij (poprzedni krok)"
       >
         Cofnij
       </button>
@@ -31,8 +32,17 @@ export function StepNavigation({
         onClick={onNext}
         type={isLastStep ? "submit" : "button"}
         disabled={loading || nextDisabled}
+        aria-label={
+          isLastStep ? "Wyślij podanie" : "Dalej (następny krok)"
+        }
+        aria-busy={loading ? true : undefined}
       >
-        {loading && <span className="loading loading-spinner"></span>}
+        {loading && (
+          <span
+            className="loading loading-spinner"
+            aria-hidden="true"
+          ></span>
+        )}
         {isLastStep ? "Wyślij" : "Dalej"}
       </button>
     </div>

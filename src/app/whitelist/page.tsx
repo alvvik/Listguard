@@ -144,7 +144,12 @@ export default function WhitelistPage() {
     return (
       <div className="h-screen flex justify-center items-center">
         <div className="w-full max-w-sm space-y-6 mx-auto ring bg-base-100 p-4 rounded-lg min-h-96 flex flex-col justify-center">
-          <h1 className="text-2xl font-bold text-center">Podanie wysłane!</h1>
+          <h1
+            className="text-2xl font-bold text-center"
+            aria-label="Podanie wysłane!"
+          >
+            Podanie wysłane!
+          </h1>
           <p className="text-center">
             Twoje podanie zostało pomyślnie wysłane. Oczekuj na kontakt od
             moderacji serwera!
@@ -175,7 +180,10 @@ export default function WhitelistPage() {
     return (
       <div className="h-screen flex justify-center items-center">
         <div className="w-full max-w-sm space-y-6 mx-auto ring bg-base-100 p-4 rounded-lg min-h-96 flex flex-col justify-center">
-          <span className="loading loading-spinner loading-lg mx-auto"></span>
+          <span
+            className="loading loading-spinner loading-lg mx-auto"
+            aria-hidden="true"
+          ></span>
         </div>
       </div>
     );
@@ -196,7 +204,7 @@ export default function WhitelistPage() {
         </ul>
 
         {error && (
-          <div className="alert alert-error">
+          <div className="alert alert-error" role="alert" aria-atomic="true">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="stroke-current shrink-0 h-6 w-6"
