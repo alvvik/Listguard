@@ -13,7 +13,7 @@ const elements: listElement[] = [
     href: "whitelist",
   },
   {
-    id: 0,
+    id: 1,
     name: "Wejdź na naszego discorda!",
     href: config.discordServerUrl,
   },
