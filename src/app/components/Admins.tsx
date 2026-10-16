@@ -1,18 +1,21 @@
 import Image from "next/image";
 import { config, Admin } from "../../../config";
-
+const avatarCache = new Map<string, string | null>();
 async function getDiscordAvatar(discordId: string) {
+  if (avatarCache.has(discordId)) return avatarCache.get(discordId)!;
+
   try {
     const res = await fetch(`https://discord.com/api/v10/users/${discordId}`, {
       headers: { Authorization: `Bot ${process.env.TOKEN}` },
-      next: { revalidate: 3600 },
+      next: { revalidate: 60 * 60 * 24 },
+      cache: "force-cache",
     });
 
     if (!res.ok) return null;
     const data = await res.json();
 
     return data.avatar
-      ? `https://cdn.discordapp.com/avatars/${discordId}/${data.avatar}.png?size=128`
+      ? `https://cdn.discordapp.com/avatars/${discordId}/${data.avatar}.png?size=256`
       : null;
   } catch {
     return null;
@@ -30,7 +33,7 @@ async function AdminCard({ admin }: { admin: Admin }) {
         alt={`Avatar ${admin.name}`}
         width={64}
         height={64}
-        loading="eager"
+        loading="lazy"
         className="rounded-full ring-offset-1 ring-accent-content ring-2"
       />
       <div className="space-y-1">

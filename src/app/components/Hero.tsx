@@ -5,7 +5,7 @@ import { config } from "../../../config";
 import { Parallax } from "./Parallax";
 export default function Hero() {
   return (
-    <section className="hero  min-h-screen overflow-hidden">
+    <section className="hero  min-h-screen overflow-hidden relative">
       <Image
         src={background}
         alt=""

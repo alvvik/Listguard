@@ -12,6 +12,7 @@ export default function Footer() {
             src={background}
             alt=""
             fill
+            sizes="100vw"
             aria-hidden="true"
             className="object-cover object-center"
           />
