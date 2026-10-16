@@ -99,7 +99,9 @@ const exampleCommand = {
             .setColor(config.mainColour as `#${string}`)
 
             .setTitle(config.serverName)
-            .setDescription(`Zaktulizowano status użytkonika: **<@${userId}>**`)
+            .setDescription(
+              `Zaktualizowano status użytkonika: **<@${userId}>**`,
+            )
             .addFields({
               name: "Aktualny status:",
               value: config.applicationStatusLabel[dbStatus],
