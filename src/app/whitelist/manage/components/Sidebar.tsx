@@ -1,5 +1,5 @@
 "use client";
-import { House, User } from "lucide-react";
+import { House, LayoutDashboard, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 const items: {
@@ -11,11 +11,17 @@ const items: {
   {
     id: 0,
     icon: <House className="my-1.5 inline-block size-4 shrink-0" />,
-    label: "Dash",
-    href: "/whitelist/manage",
+    label: "Wróć do głównej strony",
+    href: "/",
   },
   {
     id: 1,
+    icon: <LayoutDashboard className="my-1.5 inline-block size-4 shrink-0" />,
+    label: "Dashboard",
+    href: "/whitelist/manage",
+  },
+  {
+    id: 2,
     icon: <User className="my-1.5 inline-block size-4 shrink-0" />,
     label: "Podania",
     href: "/whitelist/manage/applications",

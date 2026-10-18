@@ -1,8 +1,8 @@
 import { users, applications } from "@/db/schema";
 import { config } from "../../../../config";
-import { formatDate } from "@/lib/utils";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
+import ApplicationTable from "./components/ApplicationTable";
 export default async function Page() {
   const dbData = await db
     .select({
@@ -15,6 +15,7 @@ export default async function Page() {
     })
     .from(applications)
     .innerJoin(users, eq(applications.userId, users.id));
+
   const statusLabels: Record<string, string> = {
     ...config.applicationStatusLabel,
   };
@@ -22,18 +23,6 @@ export default async function Page() {
   const applicationsCountByStatus = dbData.reduce(
     (acc, app) => {
       acc[app.status as keyof typeof statusLabels]++;
-      return acc;
-    },
-    {
-      pending: 0,
-      approved: 0,
-      rejected: 0,
-    } as Record<keyof typeof statusLabels, number>,
-  );
-
-  const usersCountByStatus = dbData.reduce(
-    (acc, user) => {
-      acc[user.status as keyof typeof statusLabels]++;
       return acc;
     },
     {
@@ -51,10 +40,8 @@ export default async function Page() {
 
       <div className="stats stats-vertical lg:stats-horizontal shadow w-full">
         <div className="stat">
-          <div className="stat-title">Użytkownicy:</div>
-          <div className="stat-value text-primary">
-            {usersCountByStatus.pending}
-          </div>
+          <div className="stat-title">Wszystkie podania:</div>
+          <div className="stat-value text-primary">{dbData.length}</div>
         </div>
         <div className="stat">
           <div className="stat-title">Podania: oczekujące</div>
@@ -76,7 +63,7 @@ export default async function Page() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 min-w-0">
+      <div className="grid grid-cols-2 gap-4 min-w-0">
         <div className="card bg-base-100 shadow">
           <div className="card-body p-0 sm:p-4">
             <h2 className="card-title p-4 pb-0">Użytkownicy</h2>
@@ -90,7 +77,7 @@ export default async function Page() {
                   </tr>
                 </thead>
                 <tbody>
-                  {dbData.map((u) => (
+                  {dbData.slice(-5).map((u) => (
                     <tr key={u.id}>
                       <td>{u.id}</td>
                       <td>{u.username}</td>
@@ -103,33 +90,7 @@ export default async function Page() {
           </div>
         </div>
 
-        <div className="card bg-base-100 shadow">
-          <div className="card-body p-0 sm:p-4">
-            <h2 className="card-title p-4 pb-0">Aplikacje</h2>
-            <div className="overflow-x-auto w-full">
-              <table className="table table-auto w-full min-w-full">
-                <thead>
-                  <tr>
-                    <th>Discord ID</th>
-                    <th>Użytkownik</th>
-                    <th>Created At</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dbData.map((app) => (
-                    <tr key={app.id}>
-                      <td>{app.discordId}</td>
-                      <td>{app.username}</td>
-                      <td>{formatDate(app.createdAt)}</td>
-                      <td>{statusLabels[app.status] ?? app.status}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <ApplicationTable data={dbData ?? []} statusLabels={statusLabels} />
       </div>
     </div>
   );
