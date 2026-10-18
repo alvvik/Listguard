@@ -9,6 +9,8 @@ export default function Footer() {
       <div className="w-full flex justify-center">
         <div className="relative flex gap-3 overflow-hidden w-full justify-center items-center h-64">
           <Image
+            placeholder="blur"
+            quality="10"
             src={background}
             alt=""
             fill

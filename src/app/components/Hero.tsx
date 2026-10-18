@@ -11,7 +11,8 @@ export default function Hero() {
         alt=""
         aria-hidden="true"
         fill
-        priority
+        quality="10"
+        placeholder="blur"
         className="object-cover md:hidden"
         sizes="100vw"
         loading="lazy"
@@ -23,7 +24,8 @@ export default function Hero() {
             alt=""
             aria-hidden="true"
             fill
-            priority
+            quality="10"
+            placeholder="blur"
             className="object-cover"
             sizes="100vw"
             loading="lazy"
