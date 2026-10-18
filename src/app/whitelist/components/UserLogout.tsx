@@ -16,6 +16,7 @@ export default function UserLogOut() {
           alt="Zdjecie użytkownika"
           width={48}
           height={48}
+          loading="lazy"
           className="rounded-full"
         />
         <div>

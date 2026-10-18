@@ -14,6 +14,7 @@ export default function Footer() {
             fill
             sizes="100vw"
             aria-hidden="true"
+            loading="lazy"
             className="object-cover object-center"
           />
           <div className="pointer-events-none absolute inset-x-0 top-0 z-5 h-40 bg-linear-to-b from-background to-transparent" />

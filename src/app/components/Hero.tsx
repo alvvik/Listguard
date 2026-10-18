@@ -14,6 +14,7 @@ export default function Hero() {
         priority
         className="object-cover md:hidden"
         sizes="100vw"
+        loading="lazy"
       />
       <Parallax className="absolute inset-0 h-full w-full hidden md:block">
         <div className="absolute inset-0 h-full w-full">
@@ -25,6 +26,7 @@ export default function Hero() {
             priority
             className="object-cover"
             sizes="100vw"
+            loading="lazy"
           />
         </div>
       </Parallax>
