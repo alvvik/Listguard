@@ -32,16 +32,11 @@ export function StepNavigation({
         onClick={onNext}
         type={isLastStep ? "submit" : "button"}
         disabled={loading || nextDisabled}
-        aria-label={
-          isLastStep ? "Wyślij podanie" : "Dalej (następny krok)"
-        }
+        aria-label={isLastStep ? "Wyślij podanie" : "Dalej (następny krok)"}
         aria-busy={loading ? true : undefined}
       >
         {loading && (
-          <span
-            className="loading loading-spinner"
-            aria-hidden="true"
-          ></span>
+          <span className="loading loading-spinner" aria-hidden="true"></span>
         )}
         {isLastStep ? "Wyślij" : "Dalej"}
       </button>

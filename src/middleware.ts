@@ -32,7 +32,7 @@ export async function middleware(request: NextRequest) {
           allowedRoleIds: appConfig.allowedRoleIds,
         }),
         cache: "no-store",
-      },
+      }
     );
 
     const { hasRole } = await roleResponse.json();

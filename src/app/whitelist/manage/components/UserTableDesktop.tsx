@@ -72,7 +72,7 @@ export default function UserTableDesktop({
 
   const updateStatus = async (
     discordId: string,
-    newStatus: string,
+    newStatus: string
   ): Promise<boolean> => {
     setLoadingStatus(discordId);
     try {
@@ -140,7 +140,7 @@ export default function UserTableDesktop({
         },
       },
     ],
-    [statusLabels],
+    [statusLabels]
   );
 
   const table = useTable({

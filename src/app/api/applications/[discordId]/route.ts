@@ -6,14 +6,14 @@ import { isRateLimited } from "@/lib/rateLimit";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ discordId: string }> },
+  { params }: { params: Promise<{ discordId: string }> }
 ) {
   try {
     const ip = request.headers.get("x-forwarded-for") ?? "127.0.0.1";
     if (isRateLimited(ip, 40, 60 * 1000)) {
       return NextResponse.json(
         { error: "Zbyt wiele zapytań. Spróbuj ponownie za chwilę." },
-        { status: 429 },
+        { status: 429 }
       );
     }
 
@@ -51,14 +51,14 @@ export async function GET(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ discordId: string }> },
+  { params }: { params: Promise<{ discordId: string }> }
 ) {
   try {
     const ip = request.headers.get("x-forwarded-for") ?? "127.0.0.1";
     if (isRateLimited(ip, 10, 60 * 1000)) {
       return NextResponse.json(
         { error: "Zbyt wiele operacji modyfikacji. Odczekaj chwilę." },
-        { status: 429 },
+        { status: 429 }
       );
     }
 
@@ -72,7 +72,7 @@ export async function DELETE(
     await db.delete(users).where(eq(users.discordId, discordId));
     return NextResponse.json(
       { message: "Usunięto użytkownika" },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (err) {
     console.error(err);
@@ -82,14 +82,14 @@ export async function DELETE(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: Promise<{ discordId: string }> },
+  { params }: { params: Promise<{ discordId: string }> }
 ) {
   try {
     const ip = request.headers.get("x-forwarded-for") ?? "127.0.0.1";
     if (isRateLimited(ip, 15, 60 * 1000)) {
       return NextResponse.json(
         { error: "Zbyt wiele zmian statusu. Odczekaj chwilę." },
-        { status: 429 },
+        { status: 429 }
       );
     }
 
@@ -106,7 +106,7 @@ export async function PATCH(
     if (!status) {
       return NextResponse.json(
         { error: "Brak statusu w żądaniu" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -118,7 +118,7 @@ export async function PATCH(
     if (!user) {
       return NextResponse.json(
         { error: "Nie znaleziono użytkownika" },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
@@ -129,7 +129,7 @@ export async function PATCH(
 
     return NextResponse.json(
       { message: "Status podania został zaktualizowany" },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (err) {
     console.error(err);

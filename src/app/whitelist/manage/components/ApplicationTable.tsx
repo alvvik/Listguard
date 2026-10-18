@@ -29,7 +29,7 @@ export default function ApplicationTable({
 
   const updateStatus = async (
     discordId: string,
-    newStatus: string,
+    newStatus: string
   ): Promise<boolean> => {
     setLoadingStatus(discordId);
     try {

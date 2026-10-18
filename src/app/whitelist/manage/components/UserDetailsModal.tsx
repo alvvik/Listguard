@@ -90,7 +90,7 @@ export default function UserDetailsModal({
                                 {answer}
                               </p>
                             </div>
-                          ),
+                          )
                         );
                       } catch (e) {
                         return (

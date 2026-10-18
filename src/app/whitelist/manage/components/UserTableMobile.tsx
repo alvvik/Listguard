@@ -38,7 +38,7 @@ export default function UserTableMobile({
 
   const updateStatus = async (
     discordId: string,
-    newStatus: string,
+    newStatus: string
   ): Promise<boolean> => {
     setLoadingStatus(discordId);
     try {

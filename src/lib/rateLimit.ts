@@ -19,7 +19,7 @@ setInterval(() => {
 export function isRateLimited(
   ip: string,
   maxRequests: number,
-  windowMs: number,
+  windowMs: number
 ): boolean {
   const now = Date.now();
   const record = rateLimitMap.get(ip);

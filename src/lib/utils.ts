@@ -4,7 +4,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 export function formatDate(
-  dateInput: string | number | Date | null | undefined,
+  dateInput: string | number | Date | null | undefined
 ) {
   if (!dateInput) return "Nie prawidłowy format daty";
   const date = new Date(dateInput);

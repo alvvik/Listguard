@@ -28,7 +28,7 @@ export async function checkUserPendingApplication(discordId: string) {
   const pendingApplication = await db.query.applications.findFirst({
     where: and(
       eq(applications.userId, user.id),
-      eq(applications.status, "pending"),
+      eq(applications.status, "pending")
     ),
   });
 
@@ -37,17 +37,20 @@ export async function checkUserPendingApplication(discordId: string) {
 
 export async function checkUserHasAllowedRole(discordId: string) {
   try {
-    const roleResponse = await fetch(`${publicEnv.NEXT_PUBLIC_BOT_URL}/check-role`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        secretKey: env.TOKEN,
-        userId: discordId,
-        guildId: env.DISCORD_GUILD_ID,
-        allowedRoleIds: config.allowedRoleIds,
-      }),
-      cache: "no-store",
-    });
+    const roleResponse = await fetch(
+      `${publicEnv.NEXT_PUBLIC_BOT_URL}/check-role`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          secretKey: env.TOKEN,
+          userId: discordId,
+          guildId: env.DISCORD_GUILD_ID,
+          allowedRoleIds: config.allowedRoleIds,
+        }),
+        cache: "no-store",
+      }
+    );
 
     const { hasRole } = (await roleResponse.json()) as {
       hasRole?: boolean;
@@ -58,9 +61,15 @@ export async function checkUserHasAllowedRole(discordId: string) {
     return false;
   }
 }
-export async function updateApplicationStatus(discordId: string, newStatus: string) {
+export async function updateApplicationStatus(
+  discordId: string,
+  newStatus: string
+) {
   const session = await auth();
-  if (!session?.user?.discordId || !(await checkUserHasAllowedRole(session.user.discordId))) {
+  if (
+    !session?.user?.discordId ||
+    !(await checkUserHasAllowedRole(session.user.discordId))
+  ) {
     return { error: "Brak uprawnień" };
   }
 
@@ -121,8 +130,8 @@ const whitelistSchema = z.object(
             }
           }),
       ];
-    }),
-  ),
+    })
+  )
 );
 
 export async function submitWhitelistForm(formData: FormData) {
@@ -189,8 +198,8 @@ export async function submitWhitelistForm(formData: FormData) {
       .where(
         and(
           eq(applications.userId, user.id),
-          eq(applications.status, "pending"),
-        ),
+          eq(applications.status, "pending")
+        )
       )
       .limit(1);
     if (pending[0]) {

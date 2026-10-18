@@ -13,7 +13,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "format": "prettier --write \"src/**/*.{js,ts,jsx,tsx,json,css,md}\""
   },
   "dependencies": {
     "@headlessui/react": "^2.2.10",
@@ -43,6 +44,7 @@
     "drizzle-kit": "^0.30.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
+    "prettier": "^3.9.10",
     "tailwindcss": "^4",
     "tsx": "^4.23.13",
     "typescript": "^5",

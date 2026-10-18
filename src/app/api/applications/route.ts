@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     if (isRateLimited(ip, 30, 60 * 1000)) {
       return NextResponse.json(
         { error: "Zbyt wiele zapytań. Spróbuj ponownie za chwilę." },
-        { status: 429 },
+        { status: 429 }
       );
     }
 
@@ -49,7 +49,7 @@ export async function GET(request: Request) {
     console.error(err);
     return NextResponse.json(
       { error: "Nie można obsłużyć tego żądania" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
     if (isRateLimited(ip, 5, 60 * 1000)) {
       return NextResponse.json(
         { error: "Zbyt wiele prób wysłania podania. Odczekaj chwilę." },
-        { status: 429 },
+        { status: 429 }
       );
     }
 
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
     if (!discordId || !username) {
       return NextResponse.json(
         { error: "Brak wymaganych pól" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -105,14 +105,14 @@ export async function POST(request: Request) {
       .where(
         and(
           eq(applications.userId, user.id),
-          eq(applications.status, "pending"),
-        ),
+          eq(applications.status, "pending")
+        )
       );
 
     if (existingPending) {
       return NextResponse.json(
         { error: "Masz już oczekujące podanie w systemie!" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -135,13 +135,13 @@ export async function POST(request: Request) {
           username: user.username,
         },
       },
-      { status: 201 },
+      { status: 201 }
     );
   } catch (err) {
     console.error("Błąd podczas dodawania podania:", err);
     return NextResponse.json(
       { error: "Wystąpił błąd serwera" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

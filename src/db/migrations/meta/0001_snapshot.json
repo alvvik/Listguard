@@ -48,9 +48,7 @@
       "indexes": {
         "users_discord_id_unique": {
           "name": "users_discord_id_unique",
-          "columns": [
-            "discord_id"
-          ],
+          "columns": ["discord_id"],
           "isUnique": true
         }
       },

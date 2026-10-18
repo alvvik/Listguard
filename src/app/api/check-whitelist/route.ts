@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     if (isRateLimited(ip, 30, 60 * 1000)) {
       return NextResponse.json(
         { error: "Zbyt wiele zapytań. Spróbuj ponownie za chwilę." },
-        { status: 429 },
+        { status: 429 }
       );
     }
 
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     if (!discordId) {
       return NextResponse.json(
         { error: "Discord ID is required" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     console.error("Error checking whitelist:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

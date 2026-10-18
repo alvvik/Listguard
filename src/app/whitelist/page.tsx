@@ -34,7 +34,7 @@ export default function WhitelistPage() {
       if (session?.user?.discordId) {
         setCheckingPending(true);
         const pending = await checkUserPendingApplication(
-          session.user.discordId,
+          session.user.discordId
         );
         setHasPendingApplication(pending);
         setCheckingPending(false);
@@ -67,19 +67,19 @@ export default function WhitelistPage() {
         if (trimmedAnswer.length > 0) {
           if (trimmedAnswer.length < 3) {
             validationErrors.push(
-              `Pytanie "${question.label}" musi mieć minimum 3 znaki`,
+              `Pytanie "${question.label}" musi mieć minimum 3 znaki`
             );
           }
 
           if (question.style === "short" && trimmedAnswer.length > 100) {
             validationErrors.push(
-              `Pytanie "${question.label}" nie może przekraczać 100 znaków`,
+              `Pytanie "${question.label}" nie może przekraczać 100 znaków`
             );
           }
 
           if (question.style === "paragraph" && trimmedAnswer.length > 1000) {
             validationErrors.push(
-              `Pytanie "${question.label}" nie może przekraczać 1000 znaków`,
+              `Pytanie "${question.label}" nie może przekraczać 1000 znaków`
             );
           }
         }

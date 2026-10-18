@@ -52,12 +52,14 @@ const QuestionInput = memo(
         />
         {hasError && (
           <label className="label" htmlFor={questionKey}>
-            <span id={errorId} className="label-text-alt text-error">{error}</span>
+            <span id={errorId} className="label-text-alt text-error">
+              {error}
+            </span>
           </label>
         )}
       </div>
     );
-  },
+  }
 );
 
 QuestionInput.displayName = "QuestionInput";
@@ -76,7 +78,7 @@ export function QAStep({
         [questionKey]: value,
       }));
     },
-    [setAnswers],
+    [setAnswers]
   );
 
   return (

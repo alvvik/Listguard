@@ -29,7 +29,7 @@ export default async function Page() {
       pending: 0,
       approved: 0,
       rejected: 0,
-    } as Record<keyof typeof statusLabels, number>,
+    } as Record<keyof typeof statusLabels, number>
   );
 
   return (
