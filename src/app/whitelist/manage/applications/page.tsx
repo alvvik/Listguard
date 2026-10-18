@@ -3,6 +3,7 @@ import { users, applications } from "@/db/schema";
 
 import { eq } from "drizzle-orm";
 import UserTableDesktop from "../components/UserTableDesktop";
+import UserTableMobile from "../components/UserTableMobile";
 import { config } from "../../../../../config";
 export default async function Page() {
   const dbData = await db
@@ -21,6 +22,12 @@ export default async function Page() {
       <h1 className="text-2xl font-bold">Zarządzanie podaniami</h1>
       <div className="hidden md:block">
         <UserTableDesktop
+          data={dbData}
+          statusLabels={{ ...config.applicationStatusLabel }}
+        />
+      </div>
+      <div className="md:hidden">
+        <UserTableMobile
           data={dbData}
           statusLabels={{ ...config.applicationStatusLabel }}
         />
