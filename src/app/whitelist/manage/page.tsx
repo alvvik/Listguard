@@ -63,7 +63,7 @@ export default async function Page() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 min-w-0">
+      <div className="grid md:grid-cols-2 gap-4 min-w-0">
         <div className="card bg-base-100 shadow">
           <div className="card-body p-0 sm:p-4">
             <h2 className="card-title p-4 pb-0">Użytkownicy</h2>
