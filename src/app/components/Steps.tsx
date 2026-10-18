@@ -13,7 +13,7 @@ const steps: StepItem[] = [
 export default function Steps() {
   return (
     <section className="flex   items-center justify-center py-4">
-      <ul className="steps steps-vertical lg:steps-horizontal justify-center text-center max-w-1/2">
+      <ul className="steps steps-vertical lg:steps-horizontal justify-center text-center w-1/2">
         {steps.map((step) => (
           <li
             key={step.label}
