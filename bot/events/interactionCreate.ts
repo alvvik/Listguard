@@ -3,15 +3,18 @@ import {
   Interaction,
   ChatInputCommandInteraction,
   Collection,
+  Client,
 } from "discord.js";
-import { Client } from "discord.js";
 
 type Command = {
   execute: (
     interaction: ChatInputCommandInteraction | Interaction,
-    client: Client,
+    client: Client
   ) => Promise<unknown> | unknown;
 };
+
+// Mapa przechowująca cooldowny: Map<commandName, Map<userId, timestamp>>
+const cooldowns = new Collection<string, Collection<string, number>>();
 
 const interactionCreate = {
   name: Events.InteractionCreate,
@@ -20,6 +23,7 @@ const interactionCreate = {
     const clientWithCommands = client as Client & {
       commands: Collection<string, Command>;
     };
+
     if (interaction.isButton()) {
       if (interaction.customId.startsWith("application_status:")) {
         const command = clientWithCommands.commands.get("sprawdzpodanie");
@@ -49,9 +53,37 @@ const interactionCreate = {
 
     const chatInteraction = interaction as ChatInputCommandInteraction;
     const command = clientWithCommands.commands.get(
-      chatInteraction.commandName,
+      chatInteraction.commandName
     );
     if (!command) return;
+
+    const cooldownSeconds = 3;
+    const commandName = chatInteraction.commandName;
+    const userId = chatInteraction.user.id;
+
+    if (!cooldowns.has(commandName)) {
+      cooldowns.set(commandName, new Collection());
+    }
+
+    const now = Date.now();
+    const timestamps = cooldowns.get(commandName)!;
+    const cooldownAmount = cooldownSeconds * 1000;
+
+    if (timestamps.has(userId)) {
+      const expirationTime = timestamps.get(userId)! + cooldownAmount;
+
+      if (now < expirationTime) {
+        const timeLeft = (expirationTime - now) / 1000;
+        await chatInteraction.reply({
+          content: `Poczekaj jeszcze **${timeLeft.toFixed(1)}** sekund przed ponownym użyciem tej komendy.`,
+          ephemeral: true,
+        });
+        return;
+      }
+    }
+
+    timestamps.set(userId, now);
+    setTimeout(() => timestamps.delete(userId), cooldownAmount);
 
     try {
       await command.execute(interaction, client);
