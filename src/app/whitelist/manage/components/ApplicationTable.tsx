@@ -46,7 +46,7 @@ export default function ApplicationTable({
 
       router.refresh();
       return true;
-    } catch (error) {
+    } catch {
       toast.error("Wystąpił błąd podczas zmiany statusu.");
       return false;
     } finally {

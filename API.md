@@ -24,12 +24,6 @@
 - **DELETE `/api/applications/:discordId`**
   - **Opis:** Usuwa użytkownika z bazy.
 
-### 3. Publiczne sprawdzenie
-
-- **POST `/api/check-whitelist`** _(Bez autoryzacji)_
-  - **Body:** `{ discordId }`
-  - **Odpowiedź:** `{ isInWhitelist: boolean }`
-
 ---
 
 ## Bot Endpoint

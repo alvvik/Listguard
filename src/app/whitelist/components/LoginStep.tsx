@@ -9,15 +9,22 @@ interface LoginStepProps {
   onContinue: () => void;
 }
 export function LoginStep({ session, onContinue }: LoginStepProps) {
+  const handleSignIn = async () => {
+    try {
+      await signIn("discord");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!session) return;
+    onContinue();
+  };
+
   return (
-    <form
-      className="flex flex-col gap-4 w-full"
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (!session) return;
-        onContinue();
-      }}
-    >
+    <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
       {!session ? (
         <div className="space-y-3 text-center">
           <p className="text-base-content/70 text-sm">
@@ -27,13 +34,7 @@ export function LoginStep({ session, onContinue }: LoginStepProps) {
           <button
             type="button"
             className="btn btn-primary w-full"
-            onClick={async () => {
-              try {
-                await signIn("discord");
-              } catch (error) {
-                console.error(error);
-              }
-            }}
+            onClick={handleSignIn}
           >
             Login with Discord
           </button>

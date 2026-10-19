@@ -70,6 +70,14 @@ export default function UserTableDesktop({
     return Array.from(new Set(data.map((item) => item.status))).filter(Boolean);
   }, [data]);
 
+  const handleUserSelect = (user: User) => {
+    setSelectedUser(user);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedUser(null);
+  };
+
   const updateStatus = async (
     discordId: string,
     newStatus: string
@@ -84,7 +92,7 @@ export default function UserTableDesktop({
 
       router.refresh();
       return true;
-    } catch (error) {
+    } catch {
       toast.error("Wystąpił błąd podczas zmiany statusu.");
       return false;
     } finally {
@@ -131,7 +139,7 @@ export default function UserTableDesktop({
           const user = row.original;
           return (
             <button
-              onClick={() => setSelectedUser(user)}
+              onClick={() => handleUserSelect(user)}
               className="btn btn-sm btn-outline btn-primary"
             >
               Szczegóły
@@ -158,7 +166,7 @@ export default function UserTableDesktop({
           statusLabels={statusLabels}
           onUpdateStatus={updateStatus}
           isOpen={!!selectedUser}
-          onClose={() => setSelectedUser(null)}
+          onClose={handleCloseModal}
           isLoading={loadingStatus === selectedUser.discordId}
         />
       )}
