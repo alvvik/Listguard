@@ -148,7 +148,7 @@ export default function UserTableDesktop({
         },
       },
     ],
-    [statusLabels]
+    []
   );
 
   const table = useTable({

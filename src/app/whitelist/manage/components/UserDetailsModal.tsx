@@ -92,7 +92,7 @@ export default function UserDetailsModal({
                             </div>
                           )
                         );
-                      } catch (e) {
+                      } catch {
                         return (
                           <p className="text-sm text-error">
                             Błąd parsowania odpowiedzi.
