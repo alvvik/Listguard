@@ -47,12 +47,12 @@ cd ListGuard
 
 Przygotuj plik `.env` zgodnie z dostarczonym wzorem.
 
-````bash
+```bash
 npm i
 npx drizzle-kit push
 npm run dev
-npm run bot```
-````
+npm run bot
+```
 
 ## Licencja
 
