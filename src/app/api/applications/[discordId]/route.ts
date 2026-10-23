@@ -3,6 +3,26 @@ import { db } from "@/db";
 import { applications, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { isRateLimited } from "@/lib/rateLimit";
+import { z } from "zod";
+
+const discordIdParamSchema = z.object({
+  discordId: z.string().min(1, "Nieprawidłowy Discord ID"),
+});
+
+const patchApplicationSchema = z.object({
+  status: z.enum(["pending", "approved", "rejected"], {
+    message: "Nieprawidłowy status podania",
+  }),
+});
+
+async function validateParams(params: Promise<{ discordId: string }>) {
+  const resolvedParams = await params;
+  const parsed = discordIdParamSchema.safeParse(resolvedParams);
+  if (!parsed.success) {
+    return null;
+  }
+  return parsed.data.discordId;
+}
 
 export async function GET(
   request: Request,
@@ -23,7 +43,15 @@ export async function GET(
     if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
       return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
     }
-    const { discordId } = await params;
+
+    const discordId = await validateParams(params);
+    if (!discordId) {
+      return NextResponse.json(
+        { error: "Nieprawidłowy Discord ID" },
+        { status: 400 }
+      );
+    }
+
     const application = await db
       .select({
         id: applications.id,
@@ -68,7 +96,15 @@ export async function DELETE(
     if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
       return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
     }
-    const { discordId } = await params;
+
+    const discordId = await validateParams(params);
+    if (!discordId) {
+      return NextResponse.json(
+        { error: "Nieprawidłowy Discord ID" },
+        { status: 400 }
+      );
+    }
+
     await db.delete(users).where(eq(users.discordId, discordId));
     return NextResponse.json(
       { message: "Usunięto użytkownika" },
@@ -99,16 +135,32 @@ export async function PATCH(
     if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
       return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
     }
-    const { discordId } = await params;
-    const body = await request.json();
-    const { status } = body;
 
-    if (!status) {
+    const discordId = await validateParams(params);
+    if (!discordId) {
       return NextResponse.json(
-        { error: "Brak statusu w żądaniu" },
+        { error: "Nieprawidłowy Discord ID" },
         { status: 400 }
       );
     }
+
+    let rawBody;
+    try {
+      rawBody = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: "Nieprawidłowy format JSON" },
+        { status: 400 }
+      );
+    }
+
+    const bodyParse = patchApplicationSchema.safeParse(rawBody);
+    if (!bodyParse.success) {
+      const errorMsg = bodyParse.error.issues.map((e) => e.message).join(", ");
+      return NextResponse.json({ error: errorMsg }, { status: 400 });
+    }
+
+    const { status } = bodyParse.data;
 
     const [user] = await db
       .select()

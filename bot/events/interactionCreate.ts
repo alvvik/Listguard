@@ -13,7 +13,6 @@ type Command = {
   ) => Promise<unknown> | unknown;
 };
 
-// Mapa przechowująca cooldowny: Map<commandName, Map<userId, timestamp>>
 const cooldowns = new Collection<string, Collection<string, number>>();
 
 const interactionCreate = {

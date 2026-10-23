@@ -3,6 +3,39 @@ import { applications, users } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { isRateLimited } from "@/lib/rateLimit";
+import { z } from "zod";
+
+export const applicationItemSchema = z.object({
+  id: z.number(),
+  status: z.string(),
+  answers: z.string().nullable(),
+  createdAt: z.string(),
+  discordId: z.string().nullable(),
+  username: z.string().nullable(),
+});
+
+export type ApplicationItem = z.infer<typeof applicationItemSchema>;
+
+const getApplicationsQuerySchema = z.object({
+  status: z.string().optional(),
+  limit: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : 50))
+    .pipe(
+      z
+        .number()
+        .int("Limit musi być liczbą całkowitą")
+        .positive("Limit musi być dodatni")
+        .max(100, "Maksymalny limit to 100")
+    ),
+});
+
+const postApplicationSchema = z.object({
+  discordId: z.string().min(1, "Discord ID jest wymagane"),
+  username: z.string().min(1, "Nazwa użytkownika jest wymagana"),
+  answers: z.record(z.string(), z.any()).optional().nullable(),
+});
 
 export async function GET(request: Request) {
   try {
@@ -23,9 +56,17 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get("status");
-    const limitParam = searchParams.get("limit");
-    const limit = limitParam ? parseInt(limitParam, 10) : 50;
+    const queryParse = getApplicationsQuerySchema.safeParse({
+      status: searchParams.get("status") ?? undefined,
+      limit: searchParams.get("limit") ?? undefined,
+    });
+
+    if (!queryParse.success) {
+      const errorMsg = queryParse.error.issues.map((e) => e.message).join(", ");
+      return NextResponse.json({ error: errorMsg }, { status: 400 });
+    }
+
+    const { status, limit } = queryParse.data;
 
     let query = db
       .select({
@@ -44,7 +85,7 @@ export async function GET(request: Request) {
     }
 
     const response = await query.limit(limit);
-    return NextResponse.json(response, { status: 200 });
+    return NextResponse.json<ApplicationItem[]>(response, { status: 200 });
   } catch (err) {
     console.error(err);
     return NextResponse.json(
@@ -72,15 +113,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Brak dostępu" }, { status: 403 });
     }
 
-    const body = await request.json();
-    const { discordId, username, answers } = body;
-
-    if (!discordId || !username) {
+    let rawBody;
+    try {
+      rawBody = await request.json();
+    } catch {
       return NextResponse.json(
-        { error: "Brak wymaganych pól" },
+        { error: "Nieprawidłowy format JSON" },
         { status: 400 }
       );
     }
+
+    const bodyParse = postApplicationSchema.safeParse(rawBody);
+    if (!bodyParse.success) {
+      const errorMsg = bodyParse.error.issues.map((e) => e.message).join(", ");
+      return NextResponse.json({ error: errorMsg }, { status: 400 });
+    }
+
+    const { discordId, username, answers } = bodyParse.data;
 
     let [user] = await db
       .select()

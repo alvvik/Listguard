@@ -4,6 +4,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import http from "node:http";
 import { Client, Collection, GatewayIntentBits } from "discord.js";
+import { z } from "zod";
 
 interface BotCommand {
   data: { name: string };
@@ -13,6 +14,13 @@ interface BotCommand {
 interface CustomClient extends Client {
   commands: Collection<string, BotCommand>;
 }
+
+const checkRoleSchema = z.object({
+  secretKey: z.string().min(1),
+  userId: z.string().min(1),
+  allowedRoleIds: z.array(z.string()),
+  guildId: z.string().min(1),
+});
 
 export const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
@@ -62,27 +70,34 @@ async function main() {
       req.on("end", async () => {
         try {
           const data = JSON.parse(body);
-          const { secretKey, userId, allowedRoleIds, guildId } = data;
+          const validation = checkRoleSchema.safeParse(data);
+          if (!validation.success) {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(
+              JSON.stringify({
+                error: "Invalid request data",
+                details: validation.error.issues,
+              })
+            );
+            return;
+          }
+
+          const { secretKey, userId, allowedRoleIds, guildId } =
+            validation.data;
           if (secretKey !== process.env.TOKEN) {
             res.writeHead(401, { "Content-Type": "application/json" });
             res.end(
               JSON.stringify({
                 error: "Invalid secret key",
-              }),
+              })
             );
-            return;
-          }
-
-          if (!userId || !allowedRoleIds || !guildId) {
-            res.writeHead(400, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ error: "Missing required fields" }));
             return;
           }
 
           const guild = await client.guilds.fetch(guildId);
           const member = await guild.members.fetch(userId);
           const hasRole = allowedRoleIds.some((roleId: string) =>
-            member.roles.cache.has(roleId),
+            member.roles.cache.has(roleId)
           );
 
           res.writeHead(200, { "Content-Type": "application/json" });

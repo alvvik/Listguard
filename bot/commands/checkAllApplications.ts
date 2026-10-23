@@ -7,10 +7,16 @@ import {
   GuildMember,
   SlashCommandBuilder,
 } from "discord.js";
+import { z } from "zod";
 import { config } from "../../config";
 import { createNoRoleEmbed } from "../embeds/createNoRoleEmbed";
-
+import {
+  ApplicationItem,
+  applicationItemSchema,
+} from "../../src/app/api/applications/route";
 const PAGE_SIZE = 5;
+
+const applicationsResponseSchema = z.array(applicationItemSchema);
 
 const createPageRow = (currentPage: number, totalPages: number) => {
   const previousButton = new ButtonBuilder()
@@ -27,20 +33,14 @@ const createPageRow = (currentPage: number, totalPages: number) => {
 
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
     previousButton,
-    nextButton,
+    nextButton
   );
 };
 
 const createApplicationsEmbed = (
   interaction: ChatInputCommandInteraction,
-  applications: Array<{
-    id: number;
-    status: string;
-    createdAt: string;
-    discordId: string | null;
-    username: string | null;
-  }>,
-  page: number,
+  applications: ApplicationItem[],
+  page: number
 ) => {
   const totalPages = Math.max(1, Math.ceil(applications.length / PAGE_SIZE));
   const start = page * PAGE_SIZE;
@@ -71,7 +71,7 @@ const createApplicationsEmbed = (
     .setDescription(description)
     .setTimestamp()
     .setFooter({
-      text: `Strona ${page + 1}/${totalPages} - Developed by Alvv`,
+      text: `Strona ${page + 1}/${totalPages}`,
       iconURL: interaction.client.user?.displayAvatarURL() || undefined,
     });
 };
@@ -79,7 +79,7 @@ const createApplicationsEmbed = (
 const checkAllApplication = {
   data: new SlashCommandBuilder()
     .setName("podania")
-    .setDescription("Wyswietl kto wysłał podanie"),
+    .setDescription("Wyświetl kto wysłał podanie"),
   async execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.inCachedGuild()) {
       return interaction.reply({
@@ -101,7 +101,7 @@ const checkAllApplication = {
     }
 
     const hasRole = config.allowedRoleIds.some((roleId) =>
-      member.roles.cache.has(roleId),
+      member.roles.cache.has(roleId)
     );
 
     if (!hasRole) {
@@ -120,7 +120,7 @@ const checkAllApplication = {
         headers: {
           Authorization: `Bearer ${process.env.TOKEN}`,
         },
-      },
+      }
     );
 
     if (!res.ok) {
@@ -130,21 +130,27 @@ const checkAllApplication = {
       });
     }
 
-    const applications = (await res.json()) as Array<{
-      id: number;
-      status: string;
-      createdAt: string;
-      discordId: string | null;
-      username: string | null;
-    }>;
+    const rawData = await res.json();
+    const validationResult = applicationsResponseSchema.safeParse(rawData);
 
+    if (!validationResult.success) {
+      console.error(
+        "Błąd walidacji danych z API:",
+        validationResult.error.issues
+      );
+      return interaction.reply({
+        content: "Otrzymano nieprawidłową strukturę danych z serwera.",
+        ephemeral: true,
+      });
+    }
+
+    const applications = validationResult.data;
     if (!applications.length) {
       return interaction.reply({
         content: "Brak podań do wyświetlenia.",
         ephemeral: true,
       });
     }
-
     const totalPages = Math.max(1, Math.ceil(applications.length / PAGE_SIZE));
     let currentPage = 0;
 
