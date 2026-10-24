@@ -1,35 +1,7 @@
 import { env } from "@/lib/env.client";
+import { Config } from "@/types/config";
 
-interface ApplicationStatusLabels {
-  pending: string;
-  approved: string;
-  rejected: string;
-}
-
-interface WhitelistQuestion {
-  id: string;
-  label: string;
-  style: "short" | "paragraph";
-  required?: boolean;
-}
-
-interface Config {
-  serverName: string;
-  mainColour: string;
-  domain: string;
-  connectLink: string;
-  allowedRoleIds: string[];
-  discordServerUrl: string;
-  applicationStatusLabel: ApplicationStatusLabels;
-  whitelistQuestions: WhitelistQuestion[];
-  adminsConfig: Admin[];
-}
-
-export interface Admin {
-  name: string;
-  rank: string;
-  discordId: string;
-}
+export * from "@/types/config";
 
 export const config: Config = {
   serverName: "Listguard",
