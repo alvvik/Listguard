@@ -35,7 +35,7 @@ export const config: Config = {
   serverName: "Listguard",
   mainColour: "#9900ff",
   domain: env.NEXT_PUBLIC_DOMAIN || "localhost:2877",
-  connectLink: "cfx.re/join/test",
+  connectLink: "connect 127.0.0.1:30120",
   allowedRoleIds: ["1549155771764318208"],
   discordServerUrl: "",
   applicationStatusLabel: {

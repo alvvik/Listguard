@@ -3,9 +3,11 @@ import Link from "next/link";
 import background from "../../../public/background.jpg";
 import { config } from "../../../config";
 import { Parallax } from "./Parallax";
+import ConnectBox from "./ConnectBox";
+
 export default function Hero() {
   return (
-    <section className="hero  min-h-screen overflow-hidden relative">
+    <section className="hero min-h-screen overflow-hidden relative">
       <Image
         src={background}
         alt=""
@@ -35,31 +37,20 @@ export default function Hero() {
       <div className="hero-overlay absolute inset-0 bg-black/50" />
 
       <div className="hero-content relative z-10 text-neutral-content text-center">
-        <div className="max-w-md">
+        <div className="max-w-md w-full flex flex-col items-center">
           <h1 className="mb-5 text-5xl font-bold">{config.serverName}</h1>
-          <p className="mb-5">
+          <p className="mb-6">
             Pełna integracja Discorda ze stroną WWW i landing page. Open Source,
             bez ukrytych opłat i z pełną kontrolą nad kodem.
           </p>
-          <div className="flex flex-col md:flex-row gap-4 justify-center items-center w-full max-w-md mx-auto">
+          <div className="flex flex-col gap-4 w-full items-center">
             <Link
-              className="btn btn-primary w-full md:w-auto"
+              className="btn btn-primary w-full"
               href={"/whitelist"}
             >
               Aplikuj na whitelist!
             </Link>
-            <Link
-              className="btn btn-secondary w-full md:w-auto"
-              href={config.connectLink}
-            >
-              Dołącz na serwer!
-            </Link>
-            <Link
-              className="btn w-full md:w-auto"
-              href={"https://github.com/alvvik"}
-            >
-              Github
-            </Link>
+            <ConnectBox />
           </div>
         </div>
       </div>
