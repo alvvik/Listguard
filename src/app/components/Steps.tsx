@@ -14,7 +14,9 @@ export default function Steps() {
   return (
     <section className="flex flex-col items-center justify-center py-8 px-4 max-w-5xl mx-auto w-full">
       <div className="text-center mb-10">
-        <h2 className="text-3xl font-extrabold tracking-tight mb-2">Jak zacząć?</h2>
+        <h2 className="text-3xl font-extrabold tracking-tight mb-2">
+          Jak zacząć?
+        </h2>
         <p className="text-base-content/70 text-sm max-w-md mx-auto">
           Cztery proste kroki dzielą Cię od dołączenia do naszej społeczności.
         </p>

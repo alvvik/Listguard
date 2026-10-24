@@ -44,10 +44,7 @@ export default function Hero() {
             bez ukrytych opłat i z pełną kontrolą nad kodem.
           </p>
           <div className="flex flex-col gap-4 w-full items-center">
-            <Link
-              className="btn btn-primary w-full"
-              href={"/whitelist"}
-            >
+            <Link className="btn btn-primary w-full" href={"/whitelist"}>
               Aplikuj na whitelist!
             </Link>
             <ConnectBox />
