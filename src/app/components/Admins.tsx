@@ -3,7 +3,6 @@ import { config, Admin } from "../../../config";
 const avatarCache = new Map<string, string | null>();
 async function getDiscordAvatar(discordId: string) {
   if (avatarCache.has(discordId)) return avatarCache.get(discordId)!;
-
   try {
     const res = await fetch(`https://discord.com/api/v10/users/${discordId}`, {
       headers: { Authorization: `Bot ${process.env.TOKEN}` },
@@ -21,24 +20,29 @@ async function getDiscordAvatar(discordId: string) {
     return null;
   }
 }
-
 async function AdminCard({ admin }: { admin: Admin }) {
   const fallbackAvatar = `https://cdn.discordapp.com/embed/avatars/${Number(admin.discordId) % 5}.png`;
   const avatarUrl = (await getDiscordAvatar(admin.discordId)) || fallbackAvatar;
 
   return (
-    <article className="card card-side items-center gap-4 bg-base-300 p-4 shadow">
-      <Image
-        src={avatarUrl}
-        alt={`Avatar ${admin.name}`}
-        width={64}
-        height={64}
-        loading="lazy"
-        className="rounded-full ring-offset-1 ring-accent-content ring-2"
-      />
-      <div className="space-y-1">
-        <h3 className="card-title text-lg">{admin.name}</h3>
-        <p className="text-sm text-base-content/70">{admin.rank}</p>
+    <article className="card bg-base-200/60 backdrop-blur-md border border-base-content/10 p-5 hover:border-primary/50 transition-all duration-300 flex flex-row items-center gap-4 rounded-box">
+      <div className="avatar shrink-0">
+        <div className="w-16 h-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+          <Image
+            src={avatarUrl}
+            alt={`Avatar ${admin.name}`}
+            width={64}
+            height={64}
+            loading="lazy"
+            className="rounded-full object-cover"
+          />
+        </div>
+      </div>
+      <div className="space-y-1 text-left overflow-hidden">
+        <h3 className="font-bold text-lg truncate">{admin.name}</h3>
+        <span className="badge badge-primary badge-sm font-medium">
+          {admin.rank}
+        </span>
       </div>
     </article>
   );
@@ -46,9 +50,16 @@ async function AdminCard({ admin }: { admin: Admin }) {
 
 export default function Admins() {
   return (
-    <section className="flex flex-col items-center justify-center">
-      <h2 className="mb-2 text-2xl font-bold">Nasza administracja</h2>
-      <div className="grid w-2/3 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    <section className="flex flex-col items-center justify-center py-8 px-4 max-w-5xl mx-auto w-full">
+      <div className="text-center mb-10">
+        <h2 className="text-3xl font-extrabold tracking-tight mb-2">
+          Nasza administracja
+        </h2>
+        <p className="text-base-content/70 text-sm max-w-md mx-auto">
+          Osoby dbające o porządek i rozwój naszego serwera.
+        </p>
+      </div>
+      <div className="grid w-full gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {config.adminsConfig.map((admin) => (
           <AdminCard key={admin.discordId} admin={admin} />
         ))}
