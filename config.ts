@@ -37,7 +37,7 @@ export const config: Config = {
   domain: env.NEXT_PUBLIC_DOMAIN || "localhost:2877",
   connectLink: "connect 127.0.0.1:30120",
   allowedRoleIds: ["1549155771764318208"],
-  discordServerUrl: "",
+  discordServerUrl: "discord.gg/yourserver",
   applicationStatusLabel: {
     pending: "Oczekujące",
     approved: "Zaakceptowane",
