@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 2877",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
+<<<<<<< HEAD
     "bot": "tsx ./bot/index.ts",
     "deploy": "tsx ./bot/deploy-commands.ts",
     "lint": "eslint",
@@ -26,6 +27,11 @@
     "drizzle-orm": "^0.45.2",
     "lucide-react": "^1.48.0",
     "motion": "^14.0.0",
+=======
+    "lint": "eslint"
+  },
+  "dependencies": {
+>>>>>>> origin/main
     "next": "16.3.4",
     "next-auth": "^5.0.0-beta.32",
     "react": "19.2.8",
@@ -36,16 +42,19 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/better-sqlite3": "^9.6.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+<<<<<<< HEAD
     "daisyui": "^5.7.42",
     "drizzle-kit": "^0.30.0",
+=======
+>>>>>>> origin/main
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "prettier": "^3.9.10",
     "tailwindcss": "^4",
+<<<<<<< HEAD
     "tsx": "^4.23.13",
     "typescript": "^5",
     "vitest": "^3.2.4"
@@ -57,5 +66,8 @@
     "esbuild@0.18.20": true,
     "esbuild@0.19.12": true,
     "esbuild@0.28.2": true
+=======
+    "typescript": "^5"
+>>>>>>> origin/main
   }
 }

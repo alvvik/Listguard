@@ -28,8 +28,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts",
-    "bot/commands/example.ts.example"
+    "**/*.mts"
   ],
   "exclude": ["node_modules"]
 }
